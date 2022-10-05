@@ -1,0 +1,11 @@
+@import "../variables/breakpoints";
+
+.login-page {
+  .form {
+    width: 100%;
+    @media (min-width: $tablet-breakpoint) {
+      width: 40%;
+      margin: 0 auto;
+    }
+  }
+}

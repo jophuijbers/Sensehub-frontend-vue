@@ -1,0 +1,40 @@
+.video-card {
+  min-width: 20%;
+  background-color: var(--card-color);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--sm);
+
+  &:hover {
+    cursor: pointer;
+    opacity: .6;
+  }
+
+  .video-card__image {
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+
+    border-radius: var(--sm);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    background-color: var(--bg-color);
+  }
+
+  .video-card__info {
+    padding: var(--sm);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .video-card__info__length {
+    }
+
+    .video-card__info__title {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

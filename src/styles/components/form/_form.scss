@@ -1,0 +1,25 @@
+@import 'form-control';
+@import 'button';
+@import 'file-input';
+@import 'search-bar';
+
+.form {
+  padding: var(--lg);
+
+  background-color: var(--card-color);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--md);
+
+  .input-group {
+    margin-top: var(--md);
+
+    .input-group__label {
+      margin-bottom: var(--sm);
+    }
+  }
+  .button {
+    width: 50%;
+    margin-top: var(--lg);
+    margin-right: auto;
+  }
+}

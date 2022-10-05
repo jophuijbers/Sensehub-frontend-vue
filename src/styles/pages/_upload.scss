@@ -1,0 +1,38 @@
+@import "../variables/breakpoints";
+
+.upload-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  width: 80%;
+
+  .form {
+    width: 60%;
+    height: 100%;
+  }
+
+  .video-card {
+    margin: 0 var(--md);
+    width: 20%;
+    height: 100%;
+  }
+
+  @media (max-width: $tablet-breakpoint) {
+    width: 100%;
+
+    .form {
+      width: 100%;
+    }
+
+    .video-card {
+      width: 40%;
+    }
+  }
+
+  @media (max-width: $mobile-breakpoint) {
+    .video-card {
+      width: 60%;
+    }
+  }
+}

@@ -1,0 +1,38 @@
+.video-wrapper {
+  position: relative;
+
+  .video-player {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+
+    border-radius: var(--md);
+    box-shadow: var(--card-shadow);
+    background-color: black;
+
+    &.ended {
+      opacity: 0.6;
+    }
+  }
+
+  .auto-play {
+    z-index: 999;
+
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    opacity: 0.9;
+    padding: var(--md);
+    border-radius: var(--sm);
+    background-color: var(--card-color);
+    text-align: center;
+
+    .cancel {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+.video-buttons {
+  display: flex;
+
+  .next, .prev {
+    display: flex;
+    align-items: center;
+
+    cursor: pointer;
+    background-color: var(--card-color);
+    padding: var(--sm);
+    border-radius: var(--sm);
+    box-shadow: var(--card-shadow);
+
+    img {
+      width: var(--md);
+      height: var(--md);
+
+      filter: var(--filter-text-color);
+    }
+
+    &:hover, &:active {
+      color: var(--text-color-dark);
+      img {
+        filter: var(--filter-text-color-dark);
+      }
+    }
+  }
+  .next span {
+    margin-right: var(--sm);
+  }
+  .prev span {
+    margin-left: var(--sm);
+  }
+  .next {
+    margin-left: var(--md);
+  }
+}
