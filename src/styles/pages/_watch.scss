@@ -1,0 +1,35 @@
+.watch {
+
+  .info {
+    padding: var(--sm);
+
+    .row {
+      display: flex;
+      align-items: baseline;
+    }
+
+    .video-buttons {
+      padding-top: var(--md);
+    }
+
+    .edit {
+      display: flex;
+
+      margin-left: var(--md);
+
+      img {
+        cursor: pointer;
+        width: var(--md);
+
+        filter: var(--filter-text-color-dark);
+
+        &:first-child {
+          margin-right: var(--md);
+        }
+        &:hover {
+          filter: var(--filter-text-color);
+        }
+      }
+    }
+  }
+}

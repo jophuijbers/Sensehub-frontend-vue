@@ -1,0 +1,64 @@
+.table-scroll-x {
+  overflow-x: auto;
+  border-radius: var(--md);
+}
+
+table {
+  width: 100%;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  padding: var(--sm);
+  border-radius: var(--md);
+  background-color: var(--card-color);
+  box-shadow: var(--card-shadow);
+
+  tr {
+    border-bottom: 1px solid var(--text-color);
+
+    td, th {
+      padding: var(--md);
+      text-align: left;
+    }
+
+    .hover:hover, {
+      cursor: pointer;
+      color: var(--text-color-dark);
+      text-decoration: underline;
+    }
+    .gray {
+      color: var(--text-color-dark);
+    }
+
+    &:nth-child(odd) {
+      background-color: var(--bg-color);
+    }
+
+    th:last-child {
+      text-align: right;
+    }
+
+    &:first-child th:first-child { border-top-left-radius: 10px; }
+    &:first-child th:last-child { border-top-right-radius: 10px; }
+
+    &:last-child td:first-child { border-bottom-left-radius: 10px; }
+    &:last-child td:last-child { border-bottom-right-radius: 10px; }
+  }
+
+  .grow {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  td {
+    white-space: nowrap;
+    overflow: hidden;
+
+    .button {
+      margin: -10px 0;
+    }
+  }
+}

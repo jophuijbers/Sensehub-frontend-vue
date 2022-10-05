@@ -1,0 +1,18 @@
+@import "../variables/breakpoints";
+
+.admin-page {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  column-gap: var(--md);
+  row-gap: var(--md);
+
+  @media (max-width: $mobile-breakpoint) {
+    grid-template-columns: 100%;
+  }
+  @media (min-width: $mobile-breakpoint) {
+    grid-template-columns: 100%;
+  }
+  @media (min-width: $tablet-breakpoint) {
+    grid-template-columns: 40% 60%;
+  }
+}

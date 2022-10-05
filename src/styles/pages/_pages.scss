@@ -1,0 +1,13 @@
+@import 'upload';
+@import 'login';
+@import 'admin';
+@import 'watch';
+
+#page {
+  min-height: 100vh;
+  height: 100%;
+
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: calc(var(--nav-height) + var(--lg)) var(--md) var(--lg) var(--md);
+}

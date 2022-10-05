@@ -1,0 +1,12 @@
+input, button {
+  background: white;
+  font-size: var(--md);
+
+  border-radius: var(--sm);
+  border: none;
+  padding: .5rem;
+}
+
+input[type=text], input[type=password], input[type=file] {
+  width: 100%;
+}

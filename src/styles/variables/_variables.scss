@@ -1,0 +1,28 @@
+@import "spacing";
+@import 'text';
+
+:root {
+  --bg-color: #1e1e1e;
+  --active-color: #007acc;
+
+  --nav-height: 64px;
+
+  --card-color: #2d2d30;
+  --card-shadow: 0px 0px 8px 0px rgba(0,0,0,.6);
+
+  --text-color: #D3D3D3;
+  --text-color-dark: rgb(109, 109, 109);
+
+  --content-width: 1200px;
+  --mobile: 500px;
+  --tablet: 800px;
+
+  --sm: 8px;
+  --md: 16px;
+  --lg: 24px;
+  --xl: 32px;
+  --xxl: 64px;
+
+  --filter-text-color: invert(83%) sepia(0%) saturate(0%) hue-rotate(170deg) brightness(101%) contrast(98%);
+  --filter-text-color-dark: invert(37%) sepia(0%) saturate(1423%) hue-rotate(142deg) brightness(92%) contrast(69%);
+}
