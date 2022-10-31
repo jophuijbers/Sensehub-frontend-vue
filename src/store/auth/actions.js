@@ -5,7 +5,7 @@ import {getToken, saveToken} from "@/services/local_storage.service";
 
 const actions = {
     async [LOGIN](context, payload) {
-        const { data } = await ApiService.post('auth/login', payload)
+        const { data } = await ApiService.post('auth', payload)
         context.commit(SET_AUTH, data.user)
 
         saveToken(data.token)

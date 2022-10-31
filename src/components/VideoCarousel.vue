@@ -3,7 +3,7 @@
     <div v-if="showCarousel" class="video-carousel">
       <div class="video-carousel__header mb-2">
         <span class="text-lg bold">{{ title }}</span>
-        <span class="text-dark ml-1">{{ videos.length }}</span>
+        <span class="text-dark ml-1">{{ collections.length }}</span>
       </div>
       <div class="wrapper">
         <transition :name="transition">
@@ -11,8 +11,8 @@
             <VideoCard
                 v-for="index in indexes"
                 :key="index"
-                @click.native="goToVideoPage(videos[index])"
-                :item="videos[index]"
+                @click.native="onCardClick(collections[index])"
+                :item="collections[index]"
             />
           </div>
         </transition>
@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import {FETCH_UPLOADS_WITH_TAG} from "@/store/actions.type";
+import {FETCH_COLLECTIONS_WITH_TAG} from "@/store/actions.type";
 import VideoCard from "./VideoCard";
 
 export default {
@@ -33,13 +33,13 @@ export default {
   props: ['title', 'tag'],
   data() {
     return {
-      videos: null,
+      collections: null,
       indexes: [],
       transition: ''
     }
   },
   async mounted() {
-    this.videos = await this.$store.dispatch(FETCH_UPLOADS_WITH_TAG, this.tag)
+    this.collections = await this.$store.dispatch(FETCH_COLLECTIONS_WITH_TAG, this.tag)
     if (this.showCarousel) {
       setTimeout(()=>{
         this.$nextTick(()=>{
@@ -55,9 +55,9 @@ export default {
       if (!grid) return
       const columnCount = window.getComputedStyle(grid).gridTemplateColumns.split(' ').length
       let indexesLength = columnCount
-      if (this.videos.length <= columnCount) {
+      if (this.collections.length <= columnCount) {
         this.hideButtons()
-        indexesLength = this.videos.length
+        indexesLength = this.collections.length
       }
       this.indexes = Array.from({length: indexesLength}, (v, i) => i)
     },
@@ -67,8 +67,8 @@ export default {
       const prev = []
       let index = this.indexes[0] - this.indexes.length
       for (let i = 0; i < this.indexes.length; i++) {
-        if(index <= 0) index += this.videos.length
-        if(index >= this.videos.length) index = 0
+        if(index <= 0) index += this.collections.length
+        if(index >= this.collections.length) index = 0
         prev.push(index)
         index++
       }
@@ -82,14 +82,14 @@ export default {
       let lastIndex = this.indexes[this.indexes.length -1]
       for (let i = 0; i < this.indexes.length; i++) {
         lastIndex++
-        if(lastIndex >= this.videos.length) lastIndex = 0
+        if(lastIndex >= this.collections.length) lastIndex = 0
         next.push(lastIndex)
       }
       this.indexes = next
       this.showButtons()
     },
-    goToVideoPage(video) {
-      this.$router.push({name: 'watch', query: {v: video.id}})
+    onCardClick(collection) {
+      this.$router.push({name: 'watch', query: {v: collection.id}})
     },
     hideButtons() {
       this.$refs.next.style.display = 'none'
@@ -104,7 +104,7 @@ export default {
   },
   computed: {
     showCarousel() {
-      return this.videos && this.videos.length
+      return this.collections?.length
     }
   }
 }

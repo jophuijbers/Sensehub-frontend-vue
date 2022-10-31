@@ -9,28 +9,28 @@
           <span class="text-lg bold">
             {{ current.name }}
           </span>
-          <div v-if="user.isAdmin" class="edit">
+          <div v-if="getUser.isAdmin" class="edit">
             <img @click="editVideo" src="icons/pen.svg" alt="">
             <img @click="deleteVideo" src="icons/trash-can.svg" alt="">
           </div>
         </div>
 
         <p class="text-md text-dark">Duration: {{ current.duration }}</p>
-        <p v-if="upload.tags.length" class="text-md text-dark">
+        <p v-if="getCollection.tags.length" class="text-md text-dark">
           <span>Tags: </span>
-          <span v-for="(tag, index) in upload.tags" :key="index">{{ tag }}{{ index === upload.tags.length-1 ? '' : ', ' }}</span>
+          <span v-for="(tag, index) in getCollection.tags" :key="index">{{ tag }}{{ index === getCollection.tags.length-1 ? '' : ', ' }}</span>
         </p>
 
-        <VideoButtons v-if="upload.length > 1" @prev="selectPrev" @next="selectNext" />
+        <VideoButtons v-if="getCollection.length > 1" @prev="selectPrev" @next="selectNext" />
       </div>
 
-      <div v-if="upload.length > 1" :key="upload.id" class="table-scroll-x">
+      <div v-if="getCollection.length > 1" :key="getCollection.id" class="table-scroll-x">
         <table class="mt-1">
           <tr>
-            <th class="grow text-lg">{{ upload.name }}</th>
-            <th class="text-dark">{{ upload.videos.length }}ep</th>
+            <th class="grow text-lg">{{ getCollection.name }}</th>
+            <th class="text-dark">{{ getCollection.videos.length }}ep</th>
           </tr>
-          <tr v-for="(video, index) in upload.videos" :key="index" @click="selectVideo(video)">
+          <tr v-for="(video, index) in getCollection.videos" :key="index" @click="selectVideo(video)">
             <td class="hover" :class="{ 'gray': video.id === current.id || video.hasWatched }">
               <p>{{ video.name }}</p>
             </td>
@@ -47,11 +47,10 @@
 <script>
 import {mapGetters} from "vuex";
 import {getToken} from "../services/local_storage.service";
-import {FETCH_UPLOAD} from "@/store/actions.type";
-import {DELETE_UPLOAD} from "../store/actions.type";
+import {DELETE_COLLECTION, FETCH_COLLECTION} from "@/store/actions.type";
 import VideoButtons from "../components/VideoButtons";
 import VideoPlayer from "../components/VideoPlayer";
-import {MARK_AS_WATCHED} from "../store/mutations.type";
+import {SET_VIDEO_AS_WATCHED} from "../store/mutations.type";
 
 export default {
   name: "Watch",
@@ -64,47 +63,47 @@ export default {
   },
   async created() {
     this.isLoading = true
-    await this.$store.dispatch(FETCH_UPLOAD, this.$route.query.v)
-    this.selectVideo(this.upload.videos[0])
+    await this.$store.dispatch(FETCH_COLLECTION, this.$route.query.v)
+    this.selectVideo(this.getCollection.videos[0])
     this.isLoading = false
   },
   methods: {
     selectVideo(video) {
-      this.$store.commit(MARK_AS_WATCHED, video.id)
+      this.$store.commit(SET_VIDEO_AS_WATCHED, video.id)
       this.current = video
       window.scrollTo(0,0)
     },
     selectPrev() {
       const prevIndex = this.currentIndex - 1
       if (prevIndex < 0) return
-      const prev = this.upload.videos[prevIndex]
+      const prev = this.getCollection.videos[prevIndex]
       this.selectVideo(prev)
     },
     selectNext() {
       const nextIndex = this.currentIndex + 1
-      if (nextIndex === this.upload.length) return
-      const prev = this.upload.videos[nextIndex]
+      if (nextIndex === this.getCollection.length) return
+      const prev = this.getCollection.videos[nextIndex]
       this.selectVideo(prev)
     },
     deleteVideo() {
-      const text = `Are you sure you want to delete ${this.upload.name}`
+      const text = `Are you sure you want to delete ${this.getCollection.name}`
       if (confirm(text)) {
-        this.$store.dispatch(DELETE_UPLOAD, this.upload.id).then(() => {
+        this.$store.dispatch(DELETE_COLLECTION, this.getCollection.id).then(() => {
           this.$router.push({ name: 'home' })
         })
       }
     },
     editVideo() {
-      this.$router.push({name:'edit', params: {id: this.upload.id}})
+      this.$router.push({name:'edit', params: {id: this.getCollection.id}})
     }
   },
   computed: {
-    ...mapGetters(['upload', 'user']),
+    ...mapGetters(['getCollection', 'getUser']),
     currentIndex() {
-      return this.upload.videos.indexOf(this.current)
+      return this.getCollection.videos.indexOf(this.current)
     },
     autoplay() {
-      return this.upload.length > 1 && (this.currentIndex + 1) < this.upload.length
+      return this.getCollection.length > 1 && (this.currentIndex + 1) < this.getCollection.length
     },
     videoPath() {
       return this.current.path + `?token=${getToken()}`
