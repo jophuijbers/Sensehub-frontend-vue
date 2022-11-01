@@ -13,7 +13,7 @@ export default (router) => {
             next({ name: 'home' })
         }
 
-        if((to.path === '/admin' || to.path === '/upload') && !store.getters.user.isAdmin) {
+        if((to.path === '/admin' || to.path === '/upload') && !store.getters.getUser.isAdmin) {
             next({ name: 'home' })
         }
 

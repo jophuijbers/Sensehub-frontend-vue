@@ -30,7 +30,7 @@
           <th>Last login</th>
           <th></th>
         </tr>
-        <tr v-for="(user, index) in users" :key="index">
+        <tr v-for="(user, index) in getUsers" :key="index">
           <td>
             <p>{{ user.id }}</p>
           </td>
@@ -87,7 +87,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['users'])
+    ...mapGetters(['getUsers'])
   }
 }
 </script>
