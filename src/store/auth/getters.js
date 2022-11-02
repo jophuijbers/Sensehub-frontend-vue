@@ -1,5 +1,5 @@
 const getters = {
-    user: (state) => state.user,
+    getUser: (state) => state.user,
     isAuthenticated: (state) => state.isAuthenticated
 }
 

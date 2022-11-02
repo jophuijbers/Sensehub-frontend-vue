@@ -27,7 +27,7 @@
 
 <script>
 import Button from "../components/Button";
-import {UPLOAD} from "../store/actions.type";
+import {CREATE_COLLECTION} from "../store/actions.type";
 import VideoCard from "../components/VideoCard";
 export default {
   name: "Upload",
@@ -56,14 +56,19 @@ export default {
     },
     async submit() {
       if(!this.name) return
+
       this.isLoading = true
+
       const formData = new FormData()
       formData.append('name', this.name)
+
       if (this.image) formData.append('image', this.image)
       if (this.tags) formData.append('tags', this.tags)
-      await this.$store.dispatch(UPLOAD, formData).then((video) => {
+
+      await this.$store.dispatch(CREATE_COLLECTION, formData).then((video) => {
         this.$router.push({name: 'watch', query: {v: video.id}})
       })
+
       this.isLoading = false
     }
   }

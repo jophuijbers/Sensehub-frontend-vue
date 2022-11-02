@@ -11,10 +11,10 @@
         <div class="nav-bar__items__link">
           <a href="https://docs.google.com/spreadsheets/d/1a29YOR_nIMIFddnmBEm3yQW-2lBIMUqtfEFCGpSlVK8/edit?usp=sharing" target="_blank">Requests</a>
         </div>
-        <div v-if="user.isAdmin" class="nav-bar__items__link">
+        <div v-if="getUser.isAdmin" class="nav-bar__items__link">
           <router-link :to="{ name: 'upload' }">Upload</router-link>
         </div>
-        <div v-if="user.isAdmin" class="nav-bar__items__link">
+        <div v-if="getUser.isAdmin" class="nav-bar__items__link">
           <router-link :to="{ name: 'admin' }">Admin</router-link>
         </div>
         <div class="nav-bar__items__link">
@@ -51,7 +51,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['user'])
+    ...mapGetters(['getUser'])
   }
 }
 </script>
