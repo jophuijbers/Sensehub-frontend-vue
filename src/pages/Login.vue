@@ -1,17 +1,14 @@
 <template>
   <div class="login-page">
     <form @submit.prevent="submit" class="form">
-<!--      <p class="text-lg bold">Log in</p>-->
 
       <img src="/logo.svg" alt="" class="mb-2">
       
       <div class="input-group">
-<!--        <p class="input-group__label">Username</p>-->
         <input v-model="username" type="text" placeholder="username" class="input-group__input">
       </div>
 
       <div class="input-group">
-<!--        <p class="input-group__label">Password</p>-->
         <input v-model="password" type="password" placeholder="password" class="input-group__input">
       </div>
 

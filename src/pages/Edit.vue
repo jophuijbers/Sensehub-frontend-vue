@@ -1,12 +1,12 @@
 <template>
   <div class="upload-page">
-    <div v-if="upload" class="form">
+    <div v-if="getCollection" class="form">
       <div class="mb-3">
-        <p class="text-lg bold mb-1">Edit: {{ upload.name }}</p>
+        <p class="text-lg bold mb-1">Edit: {{ getCollection.name }}</p>
       </div>
       <div class="input-group">
         <p class="input-group__label">Name</p>
-        <input v-model="name" type="text" :placeholder="upload.name" class="input-group__input">
+        <input v-model="name" type="text" :placeholder="getCollection.name" class="input-group__input">
       </div>
 
       <div class="input-group">
@@ -27,7 +27,7 @@
 
 <script>
 import Button from "../components/Button";
-import {FETCH_UPLOAD, PATCH_UPLOAD} from "../store/actions.type";
+import {FETCH_COLLECTION, UPDATE_COLLECTION} from "../store/actions.type";
 import {mapGetters} from "vuex";
 import VideoCard from "../components/VideoCard";
 
@@ -43,8 +43,8 @@ export default {
     }
   },
   async created() {
-    if (this.upload) return
-    await this.$store.dispatch(FETCH_UPLOAD, this.$route.params.id)
+    if (this.getCollection) return
+    await this.$store.dispatch(FETCH_COLLECTION, this.$route.params.id)
   },
   methods: {
     uploadImage(e) {
@@ -56,7 +56,7 @@ export default {
       if (this.name) formData.append('name', this.name)
       if (this.image) formData.append('image', this.image)
       if (this.tags) formData.append('tags', this.tags)
-      await this.$store.dispatch(PATCH_UPLOAD, {id: this.upload.id, payload: formData}).then((video) => {
+      await this.$store.dispatch(UPDATE_COLLECTION, {id: this.getCollection.id, payload: formData}).then((video) => {
         this.$router.push({name: 'watch', query: {v: video.id}})
       })
       this.isLoading = false
@@ -65,19 +65,19 @@ export default {
   computed: {
     video() {
       return {
-        name: !this.name || this.name === '' ? this.upload.name : this.name,
-        imagePath: this.image ? URL.createObjectURL(this.image) : this.upload.imagePath,
+        name: !this.name || this.name === '' ? this.getCollection.name : this.name,
+        imagePath: this.image ? URL.createObjectURL(this.image) : this.getCollection.imagePath,
         videos: [{ duration: 'xxx'}]
       }
     },
     getTags() {
       let tags = ''
-      this.upload.tags.forEach(tag => {
+      this.getCollection.tags.forEach(tag => {
         tags += `${tag} `
       })
       return tags
     },
-    ...mapGetters(['upload'])
+    ...mapGetters(['getCollection'])
   }
 }
 </script>

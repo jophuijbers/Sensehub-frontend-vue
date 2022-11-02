@@ -13,13 +13,13 @@
       <div>
         <div class="mb-2">
           <span class="text-lg bold">All movies</span>
-          <span class="text-dark ml-1">{{ getUploads.length }}</span>
+          <span class="text-dark ml-1">{{ getCollections.length }}</span>
         </div>
         <div class="video-grid">
           <VideoCard
-            v-for="upload in getUploads" :key="upload.id"
-            @click.native="onWatch(upload)"
-            :item="upload"
+            v-for="collection in getCollections" :key="collection.id"
+            @click.native="onWatch(collection)"
+            :item="collection"
           />
         </div>
       </div>
@@ -30,7 +30,7 @@
 <script>
 import {mapGetters} from "vuex";
 import VideoCard from "@/components/VideoCard";
-import {FETCH_UPLOADS} from "@/store/actions.type";
+import {FETCH_COLLECTIONS} from "@/store/actions.type";
 import VideoCarrousel from "../components/VideoCarousel";
 
 export default {
@@ -55,20 +55,20 @@ export default {
   },
   async created() {
     this.isLoading = true
-    await this.$store.dispatch(FETCH_UPLOADS, {})
+    await this.$store.dispatch(FETCH_COLLECTIONS, {})
     this.isLoading = false
   },
   methods: {
-    onWatch(upload) {
-      this.$router.push({name: 'watch', query: {v: upload.id}})
+    onWatch(collection) {
+      this.$router.push({name: 'watch', query: {v: collection.id}})
     }
   },
   computed: {
-    ...mapGetters(['getUploads'])
+    ...mapGetters(['getCollections'])
   },
   watch: {
     async searchValue() {
-      await this.$store.dispatch(FETCH_UPLOADS, this.searchValue)
+      await this.$store.dispatch(FETCH_COLLECTIONS, this.searchValue)
     }
   }
 }
