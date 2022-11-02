@@ -7,6 +7,7 @@ import router from './router'
 require('dotenv').config()
 
 import './styles/main.css'
+import './registerServiceWorker'
 
 Vue.prototype.$axios = axios
 Vue.prototype.$axios.defaults.baseURL = process.env.VUE_APP_API_URL
