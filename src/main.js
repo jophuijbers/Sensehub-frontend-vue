@@ -9,6 +9,8 @@ require('dotenv').config()
 import './styles/main.css'
 import './registerServiceWorker'
 
+import './services/fontawesome.service'
+
 Vue.prototype.$axios = axios
 Vue.prototype.$axios.defaults.baseURL = process.env.VUE_APP_API_URL
 

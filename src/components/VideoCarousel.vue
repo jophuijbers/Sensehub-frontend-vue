@@ -24,22 +24,19 @@
 </template>
 
 <script>
-import {FETCH_COLLECTIONS_WITH_TAG} from "@/store/actions.type";
 import VideoCard from "./VideoCard";
 
 export default {
   name: "VideoCarrousel",
   components: {VideoCard},
-  props: ['title', 'tag'],
+  props: ['title', 'collections'],
   data() {
     return {
-      collections: null,
       indexes: [],
       transition: ''
     }
   },
   async mounted() {
-    this.collections = await this.$store.dispatch(FETCH_COLLECTIONS_WITH_TAG, this.tag)
     if (this.showCarousel) {
       setTimeout(()=>{
         this.$nextTick(()=>{

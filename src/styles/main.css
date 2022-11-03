@@ -105,25 +105,32 @@
 }
 .video-card:hover {
   cursor: pointer;
+}
+.video-card:hover .video-card__image img, .video-card:hover .video-card__info {
   opacity: 0.6;
 }
-.video-card .video-card__image {
+.video-card__image {
+  position: relative;
+  background-color: var(--bg-color);
+}
+.video-card__image img {
   display: block;
   width: 100%;
   aspect-ratio: 2/3;
   object-fit: cover;
+}
+.video-card__image, .video-card img {
   border-radius: var(--sm);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  background-color: var(--bg-color);
 }
-.video-card .video-card__info {
+.video-card__info {
   padding: var(--sm);
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.video-card .video-card__info .video-card__info__title {
+.video-card__info__title {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -16,3 +16,8 @@ export const FETCH_COLLECTION = 'fetchCollection'
 export const CREATE_COLLECTION = 'createCollection'
 export const UPDATE_COLLECTION = 'updateCollection'
 export const DELETE_COLLECTION = 'deleteCollection'
+
+// WATCHLIST
+export const FETCH_WATCH_LIST = 'fetchWatchList'
+export const ADD_TO_WATCH_LIST = 'addToWatchList'
+export const REMOVE_FROM_WATCH_LIST = 'removeFromWatchList'
