@@ -4,9 +4,15 @@
     <div v-if="!isLoading">
       <div v-if="!searchValue">
         <VideoCarrousel
+            title="Watch list"
+            :collections="getWatchList"
+            :key="`wl-${getWatchList.length}`"
+        />
+
+        <VideoCarrousel
           v-for="(item, n) in carousels" :key="n"
           :title="item.title"
-          :tag="item.tag"
+          :collections="item.collections"
         />
       </div>
 
@@ -30,7 +36,7 @@
 <script>
 import {mapGetters} from "vuex";
 import VideoCard from "@/components/VideoCard";
-import {FETCH_COLLECTIONS} from "@/store/actions.type";
+import {FETCH_COLLECTIONS, FETCH_COLLECTIONS_WITH_TAG, FETCH_WATCH_LIST} from "@/store/actions.type";
 import VideoCarrousel from "../components/VideoCarousel";
 
 export default {
@@ -41,30 +47,38 @@ export default {
       isLoading: false,
       searchValue: null,
       carousels: [
-        { title: 'Recently added', tag: 'recent' },
-        { title: 'Nederlands', tag: 'Nederlands' },
-        { title: 'War', tag: 'War' },
-        { title: 'Cartoons', tag: 'Cartoons' },
-        { title: 'Action', tag: 'Action' },
-        { title: 'Comedy', tag: 'Comedy' },
-        { title: 'Anime', tag: 'Anime' },
-        { title: 'Sci-fi', tag: 'Sci-fi' },
-        { title: 'Documentary', tag: 'Documentary' }
+        { title: 'Recently added', tag: 'recent', collections: [] },
+        { title: 'Nederlands', tag: 'Nederlands', collections: [] },
+        { title: 'War', tag: 'War', collections: [] },
+        { title: 'Cartoons', tag: 'Cartoons', collections: [] },
+        { title: 'Action', tag: 'Action', collections: [] },
+        { title: 'Comedy', tag: 'Comedy', collections: [] },
+        { title: 'Anime', tag: 'Anime', collections: [] },
+        { title: 'Sci-fi', tag: 'Sci-fi', collections: [] },
+        { title: 'Documentary', tag: 'Documentary', collections: [] }
       ]
     }
   },
   async created() {
     this.isLoading = true
-    await this.$store.dispatch(FETCH_COLLECTIONS, {})
+    await this.$store.dispatch(FETCH_WATCH_LIST)
+    await this.fetchCarouselCollections()
+    await this.$store.dispatch(FETCH_COLLECTIONS)
     this.isLoading = false
   },
   methods: {
     onWatch(collection) {
       this.$router.push({name: 'watch', query: {v: collection.id}})
+    },
+
+    async fetchCarouselCollections() {
+      await Promise.all(this.carousels.map(async (carousel) => {
+        carousel.collections = await this.$store.dispatch(FETCH_COLLECTIONS_WITH_TAG, carousel.tag)
+      }))
     }
   },
   computed: {
-    ...mapGetters(['getCollections'])
+    ...mapGetters(['getCollections', 'getWatchList'])
   },
   watch: {
     async searchValue() {

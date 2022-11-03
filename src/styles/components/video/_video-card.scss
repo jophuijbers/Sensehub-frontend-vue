@@ -6,32 +6,39 @@
 
   &:hover {
     cursor: pointer;
-    opacity: .6;
+    .video-card__image img, .video-card__info {
+      opacity: .6;
+    }
   }
 
-  .video-card__image {
-    display: block;
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    object-fit: cover;
+  &__image {
+    position: relative;
+    background-color: var(--bg-color);
+
+    img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      object-fit: cover;
+    }
+  }
+  &__image, img {
 
     border-radius: var(--sm);
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-
-    background-color: var(--bg-color);
   }
 
-  .video-card__info {
+  &__info {
     padding: var(--sm);
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    .video-card__info__length {
+    &__length {
     }
 
-    .video-card__info__title {
+    &__title {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

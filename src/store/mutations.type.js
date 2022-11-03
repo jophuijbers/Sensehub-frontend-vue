@@ -10,3 +10,6 @@ export const ADD_USER = 'addUser'
 export const SET_COLLECTIONS = 'setCollections'
 export const SET_COLLECTION = 'setCollection'
 export const SET_VIDEO_AS_WATCHED = 'setVideoAsWatched'
+
+// WATCHLIST
+export const SET_WATCH_LIST = 'setWatchList'
