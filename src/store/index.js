@@ -4,6 +4,7 @@ import auth from './auth'
 import users from './users'
 import collections from './collections'
 import watchList from './watch-list'
+import cinema from './cinema'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ export default new Vuex.Store({
         auth,
         users,
         collections,
-        watchList
+        watchList,
+        cinema
     }
 })

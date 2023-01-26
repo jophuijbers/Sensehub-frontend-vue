@@ -44,7 +44,18 @@ const routes = [
                 path: '/admin',
                 name: 'admin',
                 component: () => import('../pages/Admin')
-            },
+            }
+        ]
+    },
+    {
+        path: '/cinema',
+        component: () => import('../layouts/CinemaLayout'),
+        children: [
+            {
+                path: '/cinema',
+                name: 'cinema',
+                component: () => import('../pages/Cinema'),
+            }
         ]
     }
 ]
