@@ -158,7 +158,7 @@ export default {
               </div>
             </div>
             <div class="room-image">
-            <img :src="room.playlist[room.index].thumbnail" />
+            <img :src="room.playlist[room.index].thumbnail === undefined ? room.thumbnail : room.playlist[room.index].thumbnail" />
           </div>
           </div>
         </li>
@@ -174,7 +174,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   padding: 0px 50px 0px 50px;
-  margin-top: 70px;
+  margin-top: 60px;
 }
 
 .container h1 {
