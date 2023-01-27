@@ -39,7 +39,7 @@ export default {
             <i data-feather="chevron-left"></i>
         </div>
         <div class="chat-container" :style="{display: growChat ? 'flex' : 'none'}">
-            <ul>
+            <ul style="flex-grow: 1;">
                 <template v-for="message in this.getChat.chat">
                     <li :key="message.message" v-if="message.clientName !== getUser.username">{{ message.clientName + ': ' + message.message }}</li>
                     <li  :key="message" class="right" v-else>{{ message.message }}</li>
@@ -50,11 +50,20 @@ export default {
                 <input @keyup.enter="sendChat()" v-model="chatMessage" type="text" placeholder="Type a message...">
                 <button @click="sendChat()"><i data-feather="send"></i></button>
             </div>
+            <div id="anchor"></div>
         </div>
     </div>
 </template>
 
 <style scoped>
+.absolute {
+    position: absolute;
+}
+.relative {
+    position: relative;
+    left: 0;
+    bottom: 0;
+}
 .chat-container {
     display: flex;
     flex-direction: column;
@@ -67,6 +76,10 @@ export default {
     height: 100%;
     margin-left: 10px;
     transition: all .3s ease;
+    overflow: hidden scroll;
+}
+.chat-container * {
+    overflow-anchor: none;
 }
 .chat-button-show {
     position: absolute;
@@ -122,11 +135,15 @@ button svg {
     height: 14px;
 }
 .horizontal-container {
+    position: relative;
+    bottom: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
     margin: 8px;
     max-height: 20px;
+    overflow-anchor: auto;
 }
 .horizontal-container p {
     display: flex;
@@ -177,5 +194,28 @@ li {
   .chat-container{
         height: 45vh;
     }
+}
+
+/*Scrollbar*/
+/* width */
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #f1f1f1;
+  padding: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: white;
 }
 </style>

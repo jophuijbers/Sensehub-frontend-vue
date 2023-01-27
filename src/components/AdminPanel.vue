@@ -93,7 +93,7 @@ export default {
         </div>
         <div class="flex between">
             <input @keyup.enter="setTime(getTime + inputTime); inputTime = null" v-model="inputTime" type="number" placeholder="Add time in sec." min="0">
-            <input v-model="path" type="text" placeholder="Path">
+            <input v-model="path" type="text" placeholder="Path (Not working yet)">
             <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video">
         </div>
         <div class="flex">

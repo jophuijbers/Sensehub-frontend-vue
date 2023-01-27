@@ -50,6 +50,25 @@ export default {
         this.setRooms(msg[1]);
       }
     },
+
+    this.$refs.cinemaContainer.addEventListener('wheel', (e) => {
+      if (e.deltaY > 0){
+        this.$refs.cinemaContainer.scrollLeft += 80;
+      }
+      else {
+        this.$refs.cinemaContainer.scrollLeft-= 80;
+      }
+    })
+
+    this.$refs.roomContainer.addEventListener('wheel', (e) => {
+      if (e.deltaY > 0){
+        this.$refs.roomContainer.scrollLeft += 80;
+      }
+      else {
+        this.$refs.roomContainer.scrollLeft -= 80;
+      }
+    })
+
     api.getRooms(this.getWs);
     feather.replace();
   },
@@ -60,13 +79,15 @@ export default {
     ...mapGetters(['getWs', 'getCurrentRoom', 'getRooms'])
   }
 }
+
+
 </script>
 
 <template>
   <div class="container">
     <div class="cinema-wrapper">
       <h1>Cinema's</h1>
-      <div class="cinema-container">
+      <div ref="cinemaContainer" class="cinema-container">
       <template class="scroll" v-for="room in this.getRooms">
         <li class="cinema-card" @click="onClick(room)" :key="room.name" v-if="room.type === 'cinema'">
           <div class="relative-cinema">
@@ -103,7 +124,7 @@ export default {
     </div>
     <div class="rooms-wrapper">
       <h1>Channels</h1>
-      <div class="rooms-container">
+      <div ref="roomContainer" class="rooms-container">
       <template v-for="room in this.getRooms">
         <li
           class="room-card"
@@ -330,8 +351,7 @@ li {
 /*Scrollbar*/
 /* width */
 ::-webkit-scrollbar {
-  width: 2px;
-  height: 2px;
+  height: 3px;
 }
 
 /* Track */
@@ -342,6 +362,7 @@ li {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: #f1f1f1;
+  padding: 3px;
 }
 
 /* Handle on hover */

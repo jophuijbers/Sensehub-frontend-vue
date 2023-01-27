@@ -42,7 +42,10 @@ export default {
         <button @click="sync()" type="button"><i class="button" data-feather="refresh-cw"></i></button>
         <div style="display: flex; align-items: center;">
                 <div @click="volumeToggle" style="display: flex; align-items: center; padding: 8px; cursor: pointer;">
-                    <div style="display: flex; align-items: center;"><i data-feather="volume-2"></i></div>
+                    <div style="display: flex; align-items: center;">
+                      <div class="volume" v-show="volume > 0"><i data-feather="volume-2"></i></div>
+                      <div class="volume" v-show="volume < 1"><i data-feather="volume-x"></i></div>
+                    </div>
                 </div>
             <input @input="getVideo.volume = (volume / 100)" v-model="volume" type="range" min="0" max="100">
         </div>
@@ -68,6 +71,10 @@ svg {
     height: 20px;
     stroke: #f1f1f1;
     background-color: transparent;
+}
+.volume:hover {
+  stroke: #bbbbbb;
+  transform: scale(1.1)
 }
 .button:hover {
     stroke: #bbbbbb;

@@ -84,7 +84,7 @@ export default {
     <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
-            <h1 style="margin-left: 10px;" >{{ this.getCurrentRoom.name }}</h1>
+            <h1 style="margin-left: 10px; width: 100%;" >{{ this.getCurrentRoom.name }}</h1>
         </div>
         <div class="horizontal-container">
             <video ref="video" class="video-player">
