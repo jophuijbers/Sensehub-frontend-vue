@@ -94,7 +94,7 @@ export default {
               </div>
             </div>
             <div class="room-image">
-            <img :src="room.playlist[room.index].thumbnail"/>
+            <img :src="room.thumbnail"/>
             </div>
           </div>
         </li>
@@ -137,7 +137,7 @@ export default {
               </div>
             </div>
             <div class="room-image">
-            <img :src="room.thumbnail" />
+            <img :src="room.playlist[room.index].thumbnail" />
           </div>
           </div>
         </li>

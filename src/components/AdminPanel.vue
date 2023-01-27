@@ -12,6 +12,7 @@ export default {
             inputTime: null,
             path: '',
             sliderTime: 0,
+            searchValue: ''
         }
     },
     methods: {
@@ -43,8 +44,8 @@ export default {
             api.postTime(this.getWs, this.getCurrentRoom.name, time)
         },
 
-        setPath() {
-            api.patchPath(this.getWs, this.getCurrentRoom.name, this.path)
+        addVideo() {
+            api.postPath(this.getWs, this.getCurrentRoom.name, this.searchValue)
         },
 
         setIndex(index) {
@@ -87,7 +88,8 @@ export default {
             <button @click="syncClients()" type="button">sync clients</button>
             <button @click="clearChat()" type="button">clear chat</button>
             <input @keyup.enter="setTime(getTime + inputTime); inputTime = null" v-model="inputTime" type="number" placeholder="Add time in sec." min="0">
-            <input @keyup.enter="setPath(path)" v-model="path" type="text" placeholder="Path">
+            <input v-model="path" type="text" placeholder="Path">
+            <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video">
         </div>
         <p>{{ formatTime(sliderTime) }}</p>
         <input class="time-slider" @change="(time) => setTime(time.target._value)" v-model="sliderTime" type="range" :max="getCurrentRoom.duration">

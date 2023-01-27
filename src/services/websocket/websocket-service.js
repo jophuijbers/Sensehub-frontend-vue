@@ -37,7 +37,7 @@ function putChat(websocket, roomName, clientName, message) {
 }
 
 function patchPath(websocket, roomName, path) {
-    send(websocket, [{"method":Method.PATCH, "type":Type.PATH}, {"room":roomName, "path":path}])
+    send(websocket, [{"method":Method.POST, "type":Type.PATH}, {"room":roomName, "path":path}])
 }
 
 function patchPlay(websocket, roomName) {

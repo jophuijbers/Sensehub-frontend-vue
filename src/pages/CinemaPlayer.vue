@@ -111,7 +111,7 @@ export default {
     display: flex;
     align-items: center;
     width: 250px;
-    margin: 20px 0px 0px 20px; 
+    margin: 80px 0px 0px 20px; 
     cursor: pointer;
 }
 
