@@ -44,7 +44,8 @@
 .admin-page {
   display: grid;
   grid-template-rows: auto 1fr;
-  column-gap: var(--md);
+  -moz-column-gap: var(--md);
+       column-gap: var(--md);
   row-gap: var(--md);
 }
 @media (max-width: 576px) {
@@ -117,7 +118,8 @@
   display: block;
   width: 100%;
   aspect-ratio: 2/3;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .video-card__image, .video-card img {
   border-radius: var(--sm);
@@ -329,8 +331,17 @@ input[type=text], input[type=password], input[type=file] {
   border-radius: 50%;
   width: 24px;
   height: 24px;
-  animation: spin 2s linear infinite;
+  -webkit-animation: spin 2s linear infinite;
+          animation: spin 2s linear infinite;
   margin-right: var(--sm);
+}
+@-webkit-keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 @keyframes spin {
   0% {
@@ -402,7 +413,8 @@ input[type=file]::-webkit-file-upload-button {
 }
 .nav-bar .nav-bar__main a img {
   filter: var(--filter-text-color);
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
   height: var(--xl);
 }
 .nav-bar .nav-bar__items a, .nav-bar .nav-bar__items p {
@@ -708,4 +720,6 @@ table td .button {
   background-color: var(--bg-color);
 }
 
-/*# sourceMappingURL=main.css.map */
+body {
+  background-color: var(--bg-color);
+}/*# sourceMappingURL=main.css.map */
