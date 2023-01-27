@@ -81,7 +81,7 @@ export default {
 
 
 <template>
-    <div>
+    <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
             <h1 style="margin-left: 10px;" >{{ this.getCurrentRoom.name }}</h1>
@@ -92,13 +92,17 @@ export default {
             </video>
             <Chat />
         </div>
-        <div style="margin-left: 50px; margin-top: 5px;">
-            <div style="display: flex; justify-content: space-between; width: 70vw;">
-                <ClientPanel />
-                <p>{{ formatTime(getTime) + '/' + formatTime(getCurrentRoom.duration) }}</p>
-                <p>{{ formatPath(getCurrentRoom.path) }}</p>
-                
+        <div class="controls">
+            <div class="control-wrapper">
+                <div class="info">
+                    <p>{{ formatPath(getCurrentRoom.path) }}</p>
+                    <p style="margin: 0px 10px;">-</p>
+                    <p>{{ formatTime(getTime) + '/' + formatTime(getCurrentRoom.duration) }}</p>
+                </div>
+                <ClientPanel/>
             </div>
+        </div>
+        <div>
             <AdminPanel v-if="getUser.isAdmin"/>
         </div>
     </div>
@@ -107,14 +111,21 @@ export default {
 
 
 <style scoped>
+.container{
+    padding: 0px 50px;
+    margin-top: 80px;
+}
 .back-wrapper {
     display: flex;
     align-items: center;
     width: 250px;
-    margin: 20px 0px 0px 20px; 
+    margin-top: 20px; 
     cursor: pointer;
 }
-
+.info{
+    display: flex;
+    margin-right: 70px;
+}
 video::-webkit-media-controls-enclosure {
   display:none !important;
 }
@@ -126,13 +137,67 @@ video::-webkit-media-controls-enclosure {
     width: 100%;
 }
 .video-player {
-    width: 70vw;
-    max-height: 70vh;
-    margin-left: 50px;
-}
-
-video {
+    width: 100%;
+    max-height: 60vh;
     box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.6);
     border-radius: 8px;
+    background-color: black;
+    transition: all .3s ease;
+}
+.controls {
+    position: relative;
+    background-color: #1e1e1e;
+    padding: 10px 0px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+.control-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 10px;
+}
+@media screen and (max-width: 1355px){
+    .container{
+        padding: 0px 10px;
+    }
+  .video-player{
+    margin: 0px 0px 10px 0px;
+    width: 100%;
+  }
+  .horizontal-container{
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 759px){
+    .container{
+        padding: 0px 10px;
+    }
+    .control-wrapper{
+        justify-content: center;
+        flex-direction: column;
+    }
+    .info{
+        margin: 0;
+    }
+  .video-player{
+    margin: 0px 0px 10px 0px;
+    width: 100%;
+  }
+  .horizontal-container{
+    flex-direction: column;
+  }
+}
+@media screen and (max-width: 460px){
+  .cinema-card{
+    min-width: 250px;
+    max-width: 250px;
+  }
+  .room-card{
+    min-width: 250px;
+    max-width: 250px;
+  }
 }
 </style>
