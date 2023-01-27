@@ -35,7 +35,7 @@ export default {
 
 <template>
     <div>
-        <div :style="{transform: growChat ? 'rotate(0deg)' : 'rotate(180deg)'}" class="chat-button-show" @click="toggleChat">
+        <div :style="{transform: growChat ? 'rotate(180deg)' : 'rotate(0deg)'}" class="chat-button-show" @click="toggleChat">
             <i data-feather="chevron-left"></i>
         </div>
         <div class="chat-container" :style="{display: growChat ? 'flex' : 'none'}">
