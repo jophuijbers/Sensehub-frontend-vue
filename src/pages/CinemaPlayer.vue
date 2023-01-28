@@ -84,13 +84,15 @@ export default {
     <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
-            <h1 style="margin-left: 10px; width: 100%;" >{{ this.getCurrentRoom.name }}</h1>
+            <h1 style="margin-left: 10px;" >{{ this.getCurrentRoom.name }}</h1>
         </div>
         <div class="horizontal-container">
             <video ref="video" class="video-player">
                 <source :src="getCurrentRoom.path" type="video/mp4">
             </video>
-            <Chat />
+            <div style="display: flex; justify-content: center; align-items: center;">
+                <Chat />
+            </div>
         </div>
         <div class="controls">
             <div class="control-wrapper">
@@ -118,7 +120,7 @@ export default {
 .back-wrapper {
     display: flex;
     align-items: center;
-    width: 250px;
+    width: 70vw;
     margin-top: 20px; 
     cursor: pointer;
 }
@@ -188,6 +190,9 @@ video::-webkit-media-controls-enclosure {
   }
   .horizontal-container{
     flex-direction: column;
+  }
+  .back-wrapper {
+    width: 95vw
   }
 }
 @media screen and (max-width: 460px){
