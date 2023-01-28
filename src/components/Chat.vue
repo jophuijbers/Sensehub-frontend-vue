@@ -46,7 +46,7 @@ export default {
             <ul style="flex-grow: 1;">
                 <template v-for="message in this.getChat.chat">
                     <li :key="message.message" v-if="message.clientName !== getUser.username">{{ message.clientName + ': ' + message.message }}</li>
-                    <li  :key="message" class="right" v-else>{{ message.message }}</li>
+                    <li :key="message" class="right" v-else>{{ message.message }}</li>
                 </template>
             </ul>
             <div class="horizontal-container">
@@ -165,6 +165,7 @@ li {
 }
 .right {
     text-align: right;
+    color: #a1a1a1;
 }
 
 @media screen and (max-width: 1355px) {

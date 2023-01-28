@@ -6,6 +6,7 @@ const getters = {
     getRooms: (state) => state.rooms,
     getChat: (state) => state.chat,
     getTime: (state) => state.time,
+    getVolume: (state) => state.volume,
     getVideo: (state) => state.video
 }
 

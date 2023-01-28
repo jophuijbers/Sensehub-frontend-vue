@@ -1,27 +1,33 @@
 <script>
 import api from '../services/websocket/websocket-service'
 import feather from 'feather-icons';
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 
 export default {
     name: "clientPanel",
     data() {
         return {
-            volume: 100,
+          storedVolume: 100
         }
     },
     methods: {
+      ...mapMutations([
+        'setTime',
+        'setVolume'
+
+      ]),
         sync() {
             api.getStatus(this.getWs, this.getCurrentRoom.name)
         },
         volumeToggle(){
             if(this.volume > 0){
-                this.volume = 0;
-                this.getVideo.volume = 0;
+              this.storedVolume = this.volume
+              this.volume = 0
+              this.getVideo.volume = 0;
             }
             else {
-                this.volume = 100;
-                this.getVideo.volume = 1;
+              this.volume = this.storedVolume
+              this.getVideo.volume = this.storedVolume / 100;
             }
         },
     },
@@ -32,7 +38,15 @@ export default {
         feather.replace();
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo'])
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo', 'getVolume']),
+        volume: {
+            get() {
+                return this.getVolume
+            },
+            set(value) {
+                this.setVolume(value)
+            }
+        }
     },
 }
 </script>
@@ -43,7 +57,8 @@ export default {
         <div style="display: flex; align-items: center;">
                 <div @click="volumeToggle" style="display: flex; align-items: center; padding: 8px; cursor: pointer;">
                     <div style="display: flex; align-items: center;">
-                      <div class="volume" v-show="volume > 0"><i data-feather="volume-2"></i></div>
+                      <div class="volume" v-show="volume > 50"><i data-feather="volume-2"></i></div>
+                      <div class="volume" v-show="(volume > 0 && volume <= 50)"><i data-feather="volume-1"></i></div>
                       <div class="volume" v-show="volume < 1"><i data-feather="volume-x"></i></div>
                     </div>
                 </div>

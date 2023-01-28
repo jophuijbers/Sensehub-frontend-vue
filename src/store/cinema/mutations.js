@@ -11,8 +11,11 @@ const mutations = {
     setChat(state, value) {
         state.chat = value
     },
-    setStoreTime(state, value) {
+    setTime(state, value) {
         state.time = value
+    },
+    setVolume(state, value) {
+        state.volume = value
     },
     setVideo(state, value) {
         state.video = value

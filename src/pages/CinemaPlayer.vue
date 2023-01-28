@@ -16,7 +16,7 @@ export default {
     },
     methods: {
         ...mapMutations([
-            'setStoreTime',
+            'setTime',
             'setChat',
             'setCurrentRoom',
             'setVideo'
@@ -52,6 +52,7 @@ export default {
                 this.ping()
                 if(this.getCurrentRoom.path !== msg[1].path) this.$refs.video.load()
                 this.setCurrentRoom(msg[1])
+                this.$refs.video.volume = this.getVolume / 100
                 this.$refs.video.currentTime = msg[1].time
                 msg[1].play ? this.$refs.video.play() : this.$refs.video.pause()
             }
@@ -69,11 +70,20 @@ export default {
         api.getStatus(this.getWs, this.getCurrentRoom.name)
         
         this.$refs.video.ontimeupdate = () => {
-            this.setStoreTime(this.$refs.video.currentTime)
+            this.setTime(this.$refs.video.currentTime)
         }
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo', 'getTime', 'getChat', 'getUser'])
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo', 'getTime', 'getChat', 'getUser', 'getVolume']),
+        time: {
+            get() {
+                return this.getTime
+            },
+            set(value) {
+                this.$refs.video.currentTime = value
+                this.setTime(value)
+            }
+        }
     }
 }
 </script>
@@ -84,7 +94,7 @@ export default {
     <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
-            <h1 style="margin-left: 10px;" >{{ this.getCurrentRoom.name }}</h1>
+            <h1 style="margin-left: 10px;" >{{ getCurrentRoom.name }}</h1>
         </div>
         <div class="horizontal-container">
             <video ref="video" class="video-player">
@@ -99,7 +109,7 @@ export default {
                 <div class="info">
                     <p>{{ formatPath(getCurrentRoom.path) }}</p>
                     <p style="margin: 0px 10px;">-</p>
-                    <p>{{ formatTime(getTime) + '/' + formatTime(getCurrentRoom.duration) }}</p>
+                    <p>{{ formatTime(time) + '/' + formatTime(getCurrentRoom.duration) }}</p>
                 </div>
                 <ClientPanel/>
             </div>

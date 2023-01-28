@@ -17,7 +17,7 @@ export default {
     },
     methods: {
         ...mapMutations([
-            'setStoreTime',
+            'setTime',
         ]),
 
         setPlay() {
@@ -40,7 +40,7 @@ export default {
             api.deleteChat(this.getWs, this.getCurrentRoom.name)
         },
 
-        setTime(time) {
+        postTime(time) {
             api.postTime(this.getWs, this.getCurrentRoom.name, time)
         },
 
@@ -76,6 +76,14 @@ export default {
     },
     computed: {
         ...mapGetters(['getVideo', 'getWs', 'getCurrentRoom', 'getTime']),
+        time: {
+            get() {
+                return this.getTime
+            },
+            set(value) {
+                this.setTime(value)
+            }
+        }
     }
 }
 </script>
@@ -92,13 +100,13 @@ export default {
             <button @click="clearChat()" type="button">Clear chat</button>
         </div>
         <div class="flex between">
-            <input @keyup.enter="setTime(getTime + inputTime); inputTime = null" v-model="inputTime" type="number" placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
+            <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number" placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
             <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px">
             <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video" style="margin-right: 0px 10px">
         </div>
         <div class="flex">
-            <p>{{ formatTime(sliderTime) }}</p>
-            <input style="border: none;" class="time-slider" @change="(time) => setTime(time.target._value)" v-model="sliderTime" type="range" :max="getCurrentRoom.duration">
+            <p>{{ formatTime(time) }}</p>
+            <input style="border: none;" class="time-slider" @change="postTime(time)" @input="() => getVideo.currentTime = time" v-model="time" type="range" :max="getCurrentRoom.duration">
         </div>
     </div>
 </template>
