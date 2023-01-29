@@ -17,7 +17,7 @@ export default {
 
       ]),
         sync() {
-            api.getStatus(this.getWs, this.getCurrentRoom.name)
+            api.getStatus(this.getWs, this.getCurrentRoom.name, this.getUser.username)
         },
         volumeToggle(){
             if(this.volume > 0){
@@ -38,7 +38,7 @@ export default {
         feather.replace();
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo', 'getVolume']),
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideo', 'getVolume', 'getUser']),
         volume: {
             get() {
                 return this.getVolume

@@ -16,8 +16,8 @@ function getRooms(websocket) {
     send(websocket, [{"method":Method.GET, "type":Type.ROOMS}])
 }
 
-function getStatus(websocket, roomName) {
-    send(websocket, [{"method":Method.GET, "type":Type.STATUS}, {"room":roomName}])
+function getStatus(websocket, roomName, clientName) {
+    send(websocket, [{"method":Method.GET, "type":Type.STATUS}, {"room":roomName, "clientName":clientName}])
 }
 
 function postTime(websocket, roomName, time) {
@@ -64,4 +64,8 @@ function deleteChat(websocket, roomName) {
     send(websocket, [{"method":Method.DELETE, "type":Type.CHAT}, {"room":roomName}])
 }
 
-export default { ping, getRooms, getStatus, postTime, postPath, postRoom, patchPath, patchPlay, putChat, patchIndex, patchLoop, patchAutoplay, patchStatus, deleteChat }
+function deleteVideo(websocket, roomName, index) {
+    send(websocket, [{"method":Method.DELETE, "type":Type.VIDEO}, {"room":roomName, "index":index}])
+}
+
+export default { ping, getRooms, getStatus, postTime, postPath, postRoom, patchPath, patchPlay, putChat, patchIndex, patchLoop, patchAutoplay, patchStatus, deleteChat, deleteVideo }

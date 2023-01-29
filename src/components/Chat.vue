@@ -9,6 +9,7 @@ export default {
         return {
             chatMessage: '',
             growChat: true,
+            clientColors: new Map
         }
     },
     methods: {
@@ -23,10 +24,24 @@ export default {
         },
         toggleChat(){
             this.growChat = !this.growChat
-        }
+        },
+        formatTime(timeStamp) {
+            let formattedTime = new Date(timeStamp).toString().substr(16, 5)
+            return formattedTime
+        },
+        getClientColor(clientName) {
+                if(!this.clientColors.has(clientName)) {
+                    let hsla = `hsla(${360 * Math.random()}, 70%, 80%, 1)`
+                    this.clientColors.set(clientName, hsla)
+                }
+                return this.clientColors.get(clientName)
+            }
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat'])
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat']),
+    },
+    watch: {
+
     },
     mounted(){
         feather.replace();
@@ -44,13 +59,19 @@ export default {
         </div>
         <div class="chat-container" :style="{display: growChat ? 'flex' : 'none'}">
             <ul style="flex-grow: 1;">
-                <template v-for="message in this.getChat.chat">
-                    <li :key="message.message" v-if="message.clientName !== getUser.username">{{ message.clientName + ': ' + message.message }}</li>
-                    <li :key="message" class="right" v-else>{{ message.message }}</li>
-                </template>
+                <li class="message" :key="message.message + message.timeStamp" v-for="message in getChat.chat">
+                    <p style="font-weight: lighter;">{{ formatTime(message.timeStamp) }} </p>
+                    <p :style="[{'font-weight': 500}, {color: getClientColor(message.clientName)}]">{{ `${message.clientName}:` }}</p>
+                    <p>{{ message.message }}</p>
+                </li>
             </ul>
             <div class="horizontal-container">
-                <p> {{ getChat.clients }} <i data-feather="user"></i></p>
+                <div>
+                    <p> {{ getChat.clients.length }} <i data-feather="user"></i></p>
+                    <ul>
+                        <li :key="client" v-for="client in getChat.clients">{{ client }}</li>
+                    </ul>
+                </div>
                 <input @keyup.enter="sendChat()" v-model="chatMessage" type="text" placeholder="Type a message...">
                 <button @click="sendChat()"><i data-feather="send"></i></button>
             </div>
@@ -87,6 +108,16 @@ export default {
 .chat-container * {
     overflow-anchor: none;
 }
+
+.message {
+    display: flex;
+}
+
+.message p{
+    justify-content: center;
+    align-items: center;
+    margin-right: 3px;
+}
 .chat-button-show {
     position: absolute;
     display: flex;
@@ -106,6 +137,7 @@ export default {
     cursor: pointer;
     margin-right: 10px;
 }
+
 input {
     display: flex;
     align-items: center;
@@ -163,8 +195,7 @@ ul {
 li {
     list-style: none;
 }
-.right {
-    text-align: right;
+.client {
     color: #a1a1a1;
 }
 

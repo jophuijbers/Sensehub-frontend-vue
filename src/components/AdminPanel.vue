@@ -12,7 +12,7 @@ export default {
             inputTime: null,
             path: '',
             sliderTime: 0,
-            searchValue: ''
+            searchValue: '',
         }
     },
     methods: {
@@ -47,7 +47,9 @@ export default {
         addVideo() {
             api.postPath(this.getWs, this.getCurrentRoom.name, this.searchValue)
         },
-
+        removeVideo(index) {
+            api.deleteVideo(this.getWs, this.getCurrentRoom.name, index)
+        },
         setIndex(index) {
             let tempIndex = this.getCurrentRoom.index + index
 
@@ -93,11 +95,13 @@ export default {
         <div class="wrapper">
             <button @click="setIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
             <button @click="setIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
-            <button @click="setPlay()" type="button"><i data-feather="play"></i><i style="margin-left: -16px;" data-feather="pause"></i></button>
+            <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="play"></i></button>
+            <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="pause"></i></button>
             <label>Autoplay<input @click="setAutoplay()" type="checkbox" v-model="autoplay"></label>
             <label>Loop<input @click="setLoop()" type="checkbox" v-model="loop"></label>
             <button @click="syncClients()" type="button">Sync clients</button>
             <button @click="clearChat()" type="button">Clear chat</button>
+            <button @click="removeVideo(getCurrentRoom.index)" type="button">Remove video</button>
         </div>
         <div class="flex between">
             <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number" placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">

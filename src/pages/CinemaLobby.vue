@@ -17,7 +17,7 @@ export default {
     setRooms(tempRooms) {
       if (tempRooms === undefined) {
         const map = this.getRooms.map((room) => {
-          if (room.time !== 0 && room.play === true) room.time++
+          if (room.time !== 0 && room.play === true && room.path !== '') room.time++
             return room
           })
         this.setStoreRooms(map)
@@ -36,7 +36,7 @@ export default {
 
     formatTime(sec) {
       if (!isNaN(sec)) {
-        let data = new Date(parseInt(sec) * 1000).toISOString().substr(11, 8);
+        let data = new Date(parseInt(sec) * 1000).toISOString().substr(11, 8)
         return data;
       }
       return "00:00:00";
@@ -109,7 +109,7 @@ export default {
                   <p class="room-participants">{{ room.clients }}<i data-feather="user"></i></p>
                 </div>
                 <p class="room-time">
-                  {{ formatTime(room.time) }}
+                  {{ formatTime(room.time)}}
                   /{{ formatTime(room.duration) }}
                 </p>
               </div>

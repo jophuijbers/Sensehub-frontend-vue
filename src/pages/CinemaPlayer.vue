@@ -1,14 +1,15 @@
 <script>
-import Chat from '../components/Chat.vue';
-import ClientPanel from '../components/ClientPanel.vue';
-import AdminPanel from '../components/AdminPanel.vue';
-import { mapGetters, mapMutations } from "vuex";
+import Chat from '../components/Chat.vue'
+import ClientPanel from '../components/ClientPanel.vue'
+import AdminPanel from '../components/AdminPanel.vue'
+import PlaylistPanel from '../components/PlaylistPanel.vue'
+import { mapGetters, mapMutations } from "vuex"
 import api from '../services/websocket/websocket-service'
-import feather from 'feather-icons';
+import feather from 'feather-icons'
 
 export default {
     name: "CinemaPlayer",
-    components: { ClientPanel, AdminPanel, Chat },
+    components: { ClientPanel, AdminPanel, Chat, PlaylistPanel },
     data() {
         return {
             latency: 0
@@ -52,6 +53,7 @@ export default {
                 this.ping()
                 if(this.getCurrentRoom.path !== msg[1].path) this.$refs.video.load()
                 this.setCurrentRoom(msg[1])
+                if(this.getCurrentRoom === '') this.getCurrentRoom.time = 0
                 this.$refs.video.volume = this.getVolume / 100
                 this.$refs.video.currentTime = msg[1].time
                 msg[1].play ? this.$refs.video.play() : this.$refs.video.pause()
@@ -67,7 +69,7 @@ export default {
             }
         }
         feather.replace();
-        api.getStatus(this.getWs, this.getCurrentRoom.name)
+        api.getStatus(this.getWs, this.getCurrentRoom.name, this.getUser.username)
         
         this.$refs.video.ontimeupdate = () => {
             this.setTime(this.$refs.video.currentTime)
@@ -111,7 +113,8 @@ export default {
                     <p style="margin: 0px 10px;">-</p>
                     <p>{{ formatTime(time) + '/' + formatTime(getCurrentRoom.duration) }}</p>
                 </div>
-                <ClientPanel/>
+                <ClientPanel />
+                <PlaylistPanel />
             </div>
         </div>
         <div>

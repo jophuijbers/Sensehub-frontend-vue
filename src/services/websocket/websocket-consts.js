@@ -19,7 +19,8 @@ export const Type = {
     PATH: 'path',
     AUTOPLAY: 'autoplay',
     LOOP: 'loop',
-    INDEX: 'index'
+    INDEX: 'index',
+    VIDEO: 'video'
     
 }
 
