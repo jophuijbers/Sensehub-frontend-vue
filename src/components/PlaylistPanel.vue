@@ -7,7 +7,6 @@ export default {
     name: "playlistPanel",
     data() {
         return {
-
         }
     },
     methods: {
@@ -20,7 +19,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser'])
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser']),
     },
     mounted() {
         feather.replace();
@@ -35,7 +34,7 @@ export default {
     <div class="playlist-container">
         <h3>Playlist</h3>
         <ul>
-            <li :key="video.name" v-for="video in getCurrentRoom.playlist">
+            <li v-for="(video, index) in getCurrentRoom.playlist" :key="index">
                 <p>{{ video.name }}</p>
                 <p style="color: #a1a1a1;">{{ formatTime(video.duration) }}</p>
                 <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i

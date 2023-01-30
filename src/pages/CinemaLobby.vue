@@ -160,12 +160,7 @@ export default {
                                         </p>
                                     </div>
                                     <p class="room-time">
-                                        {{ formatTime(room.time) }}/{{
-                                            formatTime(
-                                                room.playlist[room.index]
-                                                    .duration
-                                                                                )
-                                        }}
+                                        {{ formatTime(room) }}
                                     </p>
                                 </div>
                             </div>

@@ -16,7 +16,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['getVideos']),
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getVideos']),
         videos() {
             let searchValues = []
             searchValues = this.getVideos.filter(video => video.toLowerCase().includes(this.searchValue.toLowerCase()))
@@ -38,7 +38,7 @@ export default {
         <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video"
             style="margin-right: 0px 10px">
         <ul>
-            <li v-for="video in videos" :key="video" @click="addVideo(video)">{{ video }}</li>
+            <li v-for="(video, index) in videos" :key="index" @click="addVideo(video)">{{ video }}</li>
         </ul>
     </div>
 </template>

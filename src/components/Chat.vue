@@ -60,7 +60,7 @@ export default {
         </div>
         <div class="chat-container" :style="{ display: growChat ? 'flex' : 'none' }">
             <ul style="flex-grow: 1;">
-                <li class="message" :key="message.message + message.timeStamp" v-for="message in getChat.chat">
+                <li class="message" v-for="(message, index) in getChat.chat" :key="index">
                     <p style="font-weight: lighter;">{{ formatTime(message.timeStamp) }} </p>
                     <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
                     `${message.clientName}:` }}</p>
@@ -69,7 +69,7 @@ export default {
             </ul>
             <div class="horizontal-container">
                 <div>
-                    <p> {{ getChat.clients.length }} <i data-feather="user"></i></p>
+                    <p> {{ getChat.clients !== undefined ? getChat.clients.length : 0 }} <i data-feather="user"></i></p>
                     <ul>
                         <li :key="client" v-for="client in getChat.clients">{{ client }}</li>
                     </ul>
