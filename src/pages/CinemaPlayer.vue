@@ -82,7 +82,9 @@ export default {
         )
 
         this.$refs.video.ontimeupdate = () => {
-            this.setTime(this.$refs.video.currentTime)
+            if (this.$refs.video !== undefined) {
+                this.setTime(this.$refs.video.currentTime)
+            }
         }
     },
     computed: {
@@ -105,10 +107,10 @@ export default {
             },
         },
         banner() {
-            let bannerURL =
-                this.getWs.readyState === 1
-                    ? "https://api.sensegang.nl/thumbnails/cinema_banner.jpg"
-                    : "https://api.sensegang.nl/thumbnails/cinema_banner_noconn.jpg"
+            let bannerURL = "https://api.sensegang.nl/thumbnails/cinema_banner.jpg"
+            if (this.getWs !== undefined && this.getWs.readyState === 3) {
+                bannerURL = "https://api.sensegang.nl/thumbnails/cinema_banner_noconn.jpg"
+            }
             return bannerURL
         },
     },

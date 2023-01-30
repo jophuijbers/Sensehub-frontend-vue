@@ -1,6 +1,6 @@
 export default function () {
     return {
-        ws: new WebSocket('wss://sensegang.nl:3231/'),
+        ws: new WebSocket('ws://localhost:3231/'),
         clientName: '',
         currentRoom: null,
         rooms: [],
