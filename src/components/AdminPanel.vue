@@ -1,10 +1,12 @@
 <script>
 import api from '../services/websocket/websocket-service'
+import SearchPanel from "../components/SearchPanel.vue"
 import feather from 'feather-icons';
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
     name: "AdminPanel",
+    components: { SearchPanel },
     data() {
         return {
             autoplay: true,
@@ -78,7 +80,7 @@ export default {
         feather.replace()
     },
     computed: {
-        ...mapGetters(['getVideo', 'getWs', 'getCurrentRoom', 'getTime', 'getVideos']),
+        ...mapGetters(['getVideo', 'getWs', 'getCurrentRoom', 'getTime']),
         time: {
             get() {
                 return this.getTime
@@ -86,11 +88,6 @@ export default {
             set(value) {
                 this.setTime(value)
             }
-        },
-        videos() {
-            let searchValues = []
-            searchValues = this.getVideos.filter(video => video.toLowerCase().includes(this.searchValue.toLowerCase()))
-            return this.searchValue === '' ? [] : searchValues.slice(0, 10)
         }
     }
 }
@@ -113,17 +110,13 @@ export default {
             <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number"
                 placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
             <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px">
-            <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video"
-                style="margin-right: 0px 10px">
-            <ul>
-                <li v-for="video in videos" :key="video" @click="addVideo(video)">{{ video }}</li>
-            </ul>
         </div>
         <div class="flex">
             <p>{{ formatTime(time) }}</p>
             <input style="border: none;" class="time-slider" @change="postTime(time)"
                 @input="() => getVideo.currentTime = time" v-model="time" type="range" :max="getCurrentRoom.duration">
         </div>
+        <SearchPanel />
     </div>
 </template>
 

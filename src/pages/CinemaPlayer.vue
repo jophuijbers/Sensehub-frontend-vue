@@ -27,20 +27,15 @@ export default {
             api.ping(this.getWs)
             this.latency -= performance.now()
         },
-        formatTime(room) {
+        formatTime(tempTime) {
             let time = "00:00:00"
-            let duration = "00:00:00"
 
-            if (!isNaN(room.time) && room.path !== "")
-                time = new Date(parseInt(room.time) * 1000)
-                    .toISOString()
-                    .substr(11, 8)
-            if (!isNaN(room.duration))
-                duration = new Date(parseInt(room.duration) * 1000)
+            if (!isNaN(tempTime))
+                time = new Date(parseInt(tempTime) * 1000)
                     .toISOString()
                     .substr(11, 8)
 
-            return `${time} / ${duration}`
+            return time
         },
         formatPath(path) {
             let fileName = path
@@ -143,12 +138,12 @@ export default {
                 <div class="info">
                     <p>{{ formatPath(getCurrentRoom.path) }}</p>
                     <p style="margin: 0px 10px">-</p>
-                    <p>{{ formatTime(getCurrentRoom) }}</p>
+                    <p>{{ `${formatTime(this.time)} / ${formatTime(getCurrentRoom.duration)}` }}</p>
                 </div>
                 <ClientPanel />
-                <PlaylistPanel />
             </div>
         </div>
+        <PlaylistPanel />
         <div>
             <AdminPanel v-if="getUser.isAdmin" />
         </div>
