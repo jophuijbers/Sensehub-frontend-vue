@@ -20,8 +20,9 @@ export const Type = {
     AUTOPLAY: 'autoplay',
     LOOP: 'loop',
     INDEX: 'index',
-    VIDEO: 'video'
-    
+    VIDEO: 'video',
+    VIDEOS: 'videos'
+
 }
 
 export const Scope = {

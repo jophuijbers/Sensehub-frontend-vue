@@ -19,6 +19,9 @@ const mutations = {
     },
     setVideo(state, value) {
         state.video = value
+    },
+    setVideos(state, value) {
+        state.videos = value
     }
 }
 

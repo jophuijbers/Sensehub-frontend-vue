@@ -7,7 +7,8 @@ const getters = {
     getChat: (state) => state.chat,
     getTime: (state) => state.time,
     getVolume: (state) => state.volume,
-    getVideo: (state) => state.video
+    getVideo: (state) => state.video,
+    getVideos: (state) => state.videos
 }
 
 export default getters

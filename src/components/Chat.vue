@@ -14,15 +14,15 @@ export default {
     },
     methods: {
         sendChat() {
-            if(this.chatMessage.trim() !== ''){
+            if (this.chatMessage.trim() !== '') {
                 api.putChat(this.getWs, this.getCurrentRoom.name, this.getUser.username, this.chatMessage)
                 this.chatMessage = ''
             }
-            else{
+            else {
                 alert('Nothing found in chat input.')
             }
         },
-        toggleChat(){
+        toggleChat() {
             this.growChat = !this.growChat
         },
         formatTime(timeStamp) {
@@ -30,12 +30,12 @@ export default {
             return formattedTime
         },
         getClientColor(clientName) {
-                if(!this.clientColors.has(clientName)) {
-                    let hsla = `hsla(${360 * Math.random()}, 70%, 80%, 1)`
-                    this.clientColors.set(clientName, hsla)
-                }
-                return this.clientColors.get(clientName)
+            if (!this.clientColors.has(clientName)) {
+                let hsla = `hsla(${360 * Math.random()}, 70%, 80%, 1)`
+                this.clientColors.set(clientName, hsla)
             }
+            return this.clientColors.get(clientName)
+        }
     },
     computed: {
         ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat']),
@@ -43,10 +43,10 @@ export default {
     watch: {
 
     },
-    mounted(){
+    mounted() {
         feather.replace();
     },
-    updated(){
+    updated() {
         feather.replace();
     }
 }
@@ -54,14 +54,16 @@ export default {
 
 <template>
     <div>
-        <div :style="{transform: growChat ? 'rotate(180deg)' : 'rotate(0deg)'}" class="chat-button-show" @click="toggleChat">
+        <div :style="{ transform: growChat ? 'rotate(180deg)' : 'rotate(0deg)' }" class="chat-button-show"
+            @click="toggleChat">
             <i data-feather="chevron-left"></i>
         </div>
-        <div class="chat-container" :style="{display: growChat ? 'flex' : 'none'}">
+        <div class="chat-container" :style="{ display: growChat ? 'flex' : 'none' }">
             <ul style="flex-grow: 1;">
                 <li class="message" :key="message.message + message.timeStamp" v-for="message in getChat.chat">
                     <p style="font-weight: lighter;">{{ formatTime(message.timeStamp) }} </p>
-                    <p :style="[{'font-weight': 500}, {color: getClientColor(message.clientName)}]">{{ `${message.clientName}:` }}</p>
+                    <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
+                    `${message.clientName}:` }}</p>
                     <p>{{ message.message }}</p>
                 </li>
             </ul>
@@ -84,16 +86,18 @@ export default {
 .absolute {
     position: absolute;
 }
+
 .relative {
     position: relative;
     left: 0;
     bottom: 0;
 }
+
 .chat-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    box-shadow: inset 0px 0px 8px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
     border-radius: 8px;
     width: 100%;
     min-width: 250px;
@@ -105,6 +109,7 @@ export default {
     overflow-x: hidden;
     overflow-y: scroll;
 }
+
 .chat-container * {
     overflow-anchor: none;
 }
@@ -113,11 +118,12 @@ export default {
     display: flex;
 }
 
-.message p{
+.message p {
     justify-content: center;
     align-items: center;
     margin-right: 3px;
 }
+
 .chat-button-show {
     position: absolute;
     display: flex;
@@ -133,6 +139,7 @@ export default {
     border-radius: 25px;
     transition: all .3s ease;
 }
+
 .chat-button-show:hover {
     cursor: pointer;
     margin-right: 10px;
@@ -151,9 +158,11 @@ input {
     border-radius: 0px;
     color: #f1f1f1;
 }
-input:focus{
+
+input:focus {
     outline: none;
 }
+
 button {
     display: flex;
     align-items: center;
@@ -166,12 +175,15 @@ button {
     color: #f1f1f1;
     cursor: pointer;
 }
+
 p svg {
     height: 14px;
 }
+
 button svg {
     height: 14px;
 }
+
 .horizontal-container {
     position: relative;
     bottom: 0;
@@ -183,31 +195,37 @@ button svg {
     max-height: 20px;
     overflow-anchor: auto;
 }
+
 .horizontal-container p {
     display: flex;
     align-items: center;
 }
+
 ul {
     padding: 0;
     margin: 30px;
     position: relative;
 }
+
 li {
     list-style: none;
 }
+
 .client {
     color: #a1a1a1;
 }
 
 @media screen and (max-width: 1355px) {
-    .chat-container{
+    .chat-container {
         height: 15vh;
         margin-left: 0px;
         min-width: 40vw;
     }
+
     .chat-button-hide {
         display: none;
     }
+
     .chat-button-show {
         display: none;
     }
@@ -215,21 +233,24 @@ li {
 }
 
 @media screen and (max-width: 759px) {
-    .chat-container{
+    .chat-container {
         height: 20vh;
         margin-left: 0px;
         min-width: 60vw;
     }
+
     .chat-button-hide {
         display: none;
     }
+
     .chat-button-show {
         display: none;
     }
 
 }
-@media screen and (max-width: 460px){
-  .chat-container{
+
+@media screen and (max-width: 460px) {
+    .chat-container {
         height: 35vh;
         min-width: 70vw;
     }
@@ -238,23 +259,23 @@ li {
 /*Scrollbar*/
 /* width */
 ::-webkit-scrollbar {
-  height: 5px;
-  width: 5px;
+    height: 5px;
+    width: 5px;
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #1e1e1e;
+    background: #1e1e1e;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #f1f1f1;
-  padding: 3px;
+    background: #f1f1f1;
+    padding: 3px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: white;
+    background: white;
 }
 </style>

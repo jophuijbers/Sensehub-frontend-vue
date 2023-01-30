@@ -22,10 +22,10 @@ export default {
     computed: {
         ...mapGetters(['getWs', 'getCurrentRoom', 'getUser'])
     },
-    mounted(){
+    mounted() {
         feather.replace();
     },
-    updated(){
+    updated() {
         feather.replace();
     }
 }
@@ -38,7 +38,8 @@ export default {
             <li :key="video.name" v-for="video in getCurrentRoom.playlist">
                 <p>{{ video.name }}</p>
                 <p style="color: #a1a1a1;">{{ formatTime(video.duration) }}</p>
-                <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i data-feather="trash-2"></i></button>
+                <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i
+                        data-feather="trash-2"></i></button>
             </li>
         </ul>
     </div>
@@ -46,7 +47,7 @@ export default {
 
 <style scoped>
 .playlist-container {
-    box-shadow: inset 0px 0px 8px 0px rgba(0,0,0,0.6);
+    box-shadow: inset 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
     border-radius: 8px;
 }
 
