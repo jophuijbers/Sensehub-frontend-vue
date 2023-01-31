@@ -1,12 +1,15 @@
 <script>
 import api from '../services/websocket/websocket-service'
+import SearchPanel from "../components/SearchPanel.vue"
 import { mapGetters } from 'vuex'
 import feather from 'feather-icons'
 
 export default {
     name: "playlistPanel",
+    components: { SearchPanel },
     data() {
         return {
+            growPanel: false,
         }
     },
     methods: {
@@ -31,25 +34,49 @@ export default {
 </script>
 
 <template>
-    <div class="playlist-container">
-        <h3>Playlist</h3>
-        <ul>
-            <li v-for="(video, index) in getCurrentRoom.playlist" :key="index">
-                <p>{{ video.name }}</p>
-                <p style="color: #a1a1a1;">{{ formatTime(video.duration) }}</p>
-                <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i
-                        data-feather="trash-2"></i></button>
-            </li>
-        </ul>
+    <div class="wrapper" :style="{ bottom: growPanel ? '0' : '-30.2vh' }">
+        <div style="display: flex; align-items: center; justify-content: start; border-bottom: 1px solid #f1f1f1; margin: 0px 15px;">
+            <div>
+                <SearchPanel />
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1;">
+                <button @click="growPanel = !growPanel" class="playlist-header">Playlist<div style="display: flex; justify-content: center; align-items: center; transition: all .6s ease;" :class="{ turn: !growPanel }"><i data-feather="chevron-down"></i></div></button>
+            </div>
+        </div>
+        <div class="playlist-container">
+            <ul>
+                <li :key="video.name" v-for="video in getCurrentRoom.playlist">
+                    <div style="display: flex; align-items: center;">
+                        <p>{{ video.name }}</p>
+                        <p style="color: #a1a1a1; margin-left: 12px;">{{ formatTime(video.duration) }}</p>
+                    </div>
+                    <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i
+                            data-feather="trash-2"></i></button>
+                </li>
+            </ul>
+        </div>
     </div>
 </template>
 
 <style scoped>
+.wrapper {
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
+    transition: all .3s ease;
+    position: fixed;
+    bottom: -30%;
+    right: 0;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
+    background-color: #1e1e1e;
+    border-top-left-radius: 8px;
+}
+.turn {
+    transform: rotate(180deg);
+}
 .playlist-container {
     display: flex;
     flex-direction: column;
-    box-shadow: inset 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
-    border-radius: 8px;
     width: 100%;
     min-width: 250px;
     height: 30vh;
@@ -57,11 +84,18 @@ export default {
     transition: all .3s ease;
     overflow-x: hidden;
     overflow-y: scroll;
-    border-radius: 8px;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: 0;
+    max-width: 350px;
+}
+.playlist-header{
+    margin: 20px 0px;
+    font-size: large;
+    font-family: 'Roboto';
+    width:fit-content;
+}
 
+.playlist-header:hover{
+    cursor: pointer;
+    color: #a1a1a1;
 }
 
 h3 {
@@ -71,8 +105,13 @@ h3 {
 
 ul {
     padding: 0;
-    margin: 15px;
+    margin: 0px 15px;
     position: relative;
+    height: 100.01%
+}
+
+svg{
+    height: 16px;
 }
 
 li {
@@ -81,8 +120,9 @@ li {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 70px;
     list-style: none;
-    margin: 10px;
+    padding: 8px 0px;
     border-bottom: 1px solid #f1f1f1;
 }
 

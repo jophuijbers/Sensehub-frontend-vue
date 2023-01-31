@@ -121,33 +121,31 @@ export default {
     <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
-            <h1 style="margin-left: 10px">{{ getCurrentRoom.name }}</h1>
+            <h1 style="margin-left: 10px; margin-bottom: 20px;">{{ getCurrentRoom.name }}</h1>
         </div>
-        <div class="horizontal-container">
-            <video ref="video" class="video-player" :poster="banner">
-                <source :src="getCurrentRoom.path" type="video/mp4" />
-            </video>
-            <div style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                ">
-                <Chat />
-            </div>
-        </div>
-        <div class="controls">
-            <div class="control-wrapper">
-                <div class="info">
-                    <p>{{ formatPath(getCurrentRoom.path) }}</p>
-                    <p style="margin: 0px 10px">-</p>
-                    <p>{{ `${formatTime(this.time)} / ${formatTime(getCurrentRoom.duration)}` }}</p>
+        <div class="video-chat-wrapper">
+            <div class="horizontal-container">
+                <video ref="video" class="video-player" :poster="banner">
+                    <source :src="getCurrentRoom.path" type="video/mp4" />
+                </video>
+                <div class="controls">
+                    <div class="control-wrapper">
+                        <div class="info">
+                            <p style="flex-grow: 1; width: fit-content;">{{ formatPath(getCurrentRoom.path) }}</p>
+                            <p style="margin: 0px 10px;">-</p>
+                            <p style="flex-grow: 1; width: fit-content;">{{ `${formatTime(this.time)} / ${formatTime(getCurrentRoom.duration)}` }}</p>
+                        </div>
+                        <ClientPanel />
+                    </div>
                 </div>
-                <ClientPanel />
+            </div>
+            <div class="chat">
+                <Chat />
             </div>
         </div>
         <PlaylistPanel />
         <div>
-            <AdminPanel v-if="getUser.isAdmin" />
+            <AdminPanel v-if="!getUser.isAdmin" />
         </div>
     </div>
 </template>
@@ -157,7 +155,9 @@ export default {
     padding: 0px 50px;
     margin-top: 80px;
 }
-
+.video-chat-wrapper {
+    display: flex;
+}
 .back-wrapper {
     display: flex;
     align-items: center;
@@ -165,7 +165,11 @@ export default {
     margin-top: 20px;
     cursor: pointer;
 }
-
+.chat {
+    display: flex;
+    order: 2;
+    flex-grow: 1;
+}
 .info {
     display: flex;
     margin-right: 70px;
@@ -179,8 +183,12 @@ video::-webkit-media-controls-enclosure {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 20px;
     width: 100%;
+    flex-wrap: wrap;
+}
+
+.horizontal-container > * {
+    flex: 1 1 50%;
 }
 
 .video-player {
@@ -190,6 +198,7 @@ video::-webkit-media-controls-enclosure {
     border-radius: 8px;
     background-color: black;
     transition: all 0.3s ease;
+    order: 1;
 }
 
 .controls {
@@ -199,6 +208,7 @@ video::-webkit-media-controls-enclosure {
     left: 0;
     bottom: 0;
     width: 100%;
+    order: 3;
 }
 
 .control-wrapper {
@@ -215,11 +225,21 @@ video::-webkit-media-controls-enclosure {
 
     .video-player {
         margin: 0px 0px 10px 0px;
-        width: 100%;
+        order: 1;
     }
-
+    .controls {
+        order: 2;
+    }
+    .chat {
+        justify-content: center;
+        order: 3;
+    }
+    .video-chat-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+    }
     .horizontal-container {
-        flex-direction: column;
+        flex-wrap: wrap;
     }
 }
 
@@ -227,25 +247,17 @@ video::-webkit-media-controls-enclosure {
     .container {
         padding: 0px 10px;
     }
-
     .control-wrapper {
         justify-content: center;
         flex-direction: column;
     }
-
     .info {
         margin: 0;
     }
-
     .video-player {
         margin: 0px 0px 10px 0px;
         width: 100%;
     }
-
-    .horizontal-container {
-        flex-direction: column;
-    }
-
     .back-wrapper {
         width: 95vw;
     }

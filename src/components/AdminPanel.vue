@@ -1,12 +1,11 @@
 <script>
 import api from '../services/websocket/websocket-service'
-import SearchPanel from "../components/SearchPanel.vue"
 import feather from 'feather-icons';
 import { mapGetters, mapMutations } from 'vuex'
 
 export default {
     name: "AdminPanel",
-    components: { SearchPanel },
+    components: {},
     data() {
         return {
             autoplay: true,
@@ -95,28 +94,29 @@ export default {
 
 <template>
     <div class="panel-container">
-        <div class="wrapper">
-            <button @click="setIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
-            <button @click="setIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
-            <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="play"></i></button>
-            <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="pause"></i></button>
-            <label>Autoplay<input @click="setAutoplay()" type="checkbox" v-model="autoplay"></label>
-            <label>Loop<input @click="setLoop()" type="checkbox" v-model="loop"></label>
-            <button @click="syncClients()" type="button">Sync clients</button>
-            <button @click="clearChat()" type="button">Clear chat</button>
-            <button @click="removeVideo(getCurrentRoom.index)" type="button">Remove video</button>
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+            <div class="wrapper">
+                <button @click="setIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
+                <button @click="setIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
+                <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="play"></i></button>
+                <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="pause"></i></button>
+                <label>Autoplay<input @click="setAutoplay()" type="checkbox" v-model="autoplay"></label>
+                <label>Loop<input @click="setLoop()" type="checkbox" v-model="loop"></label>
+                <button @click="syncClients()" type="button">Sync clients</button>
+                <button @click="clearChat()" type="button">Clear chat</button>
+                <button @click="removeVideo(getCurrentRoom.index)" type="button">Remove video</button>
+            </div>
+            <div class="flex between">
+                <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number"
+                    placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
+                <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px">
+            </div>
+            <div class="flex" style="width: 100%">
+                <p>{{ formatTime(time) }}</p>
+                <input style="border: none;" class="time-slider" @change="postTime(time)"
+                    @input="() => getVideo.currentTime = time" v-model="time" type="range" :max="getCurrentRoom.duration">
+            </div>
         </div>
-        <div class="flex between">
-            <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number"
-                placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
-            <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px">
-        </div>
-        <div class="flex">
-            <p>{{ formatTime(time) }}</p>
-            <input style="border: none;" class="time-slider" @change="postTime(time)"
-                @input="() => getVideo.currentTime = time" v-model="time" type="range" :max="getCurrentRoom.duration">
-        </div>
-        <SearchPanel />
     </div>
 </template>
 
@@ -124,6 +124,9 @@ export default {
 .panel-container {
     border-radius: 8px;
     padding: 10px 10px;
+    display: flex;
+    justify-content: center;
+    width: 70%;
 }
 
 .wrapper {
@@ -295,5 +298,36 @@ input[type=range]:focus::-ms-fill-lower {
 
 input[type=range]:focus::-ms-fill-upper {
     background: transparent;
+}
+
+@media screen and (max-width: 1355px) {
+    .panel-container {
+        flex-direction: column;
+    }
+
+}
+
+@media screen and (max-width: 759px) {
+    .chat-container {
+        height: 20vh;
+        margin-left: 0px;
+        min-width: 60vw;
+    }
+
+    .chat-button-hide {
+        display: none;
+    }
+
+    .chat-button-show {
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: 460px) {
+    .chat-container {
+        height: 35vh;
+        min-width: 70vw;
+    }
 }
 </style>

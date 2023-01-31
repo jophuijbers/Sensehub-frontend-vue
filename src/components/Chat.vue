@@ -9,6 +9,7 @@ export default {
         return {
             chatMessage: '',
             growChat: true,
+            clientHover: false,
             clientColors: new Map
         }
     },
@@ -40,11 +41,9 @@ export default {
     computed: {
         ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat']),
     },
-    watch: {
-
-    },
     mounted() {
         feather.replace();
+        this.$refs.chatBox.scrollIntoView(false)
     },
     updated() {
         feather.replace();
@@ -59,30 +58,34 @@ export default {
             <i data-feather="chevron-left"></i>
         </div>
         <div class="chat-container" :style="{ display: growChat ? 'flex' : 'none' }">
-            <ul style="flex-grow: 1;">
-                <li class="message" v-for="(message, index) in getChat.chat" :key="index">
-                    <p style="font-weight: lighter;">{{ formatTime(message.timeStamp) }} </p>
+            <ul class="chatBox" ref="chatBox" style="flex-grow: 1;">
+                <li class="message" :key="message.message + message.timeStamp" v-for="message in getChat.chat">
+                    <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{ formatTime(message.timeStamp) }} </p>
                     <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
                     `${message.clientName}:` }}</p>
                     <p>{{ message.message }}</p>
                 </li>
+                <div id="anchor"></div>
             </ul>
             <div class="horizontal-container">
-                <div>
-                    <p> {{ getChat.clients !== undefined ? getChat.clients.length : 0 }} <i data-feather="user"></i></p>
-                    <ul>
+                <div @mouseover="clientHover = true" @mouseleave="clientHover = false" style="display: flex; align-items: center; position: relative;">
+                    <p> {{ getChat.clients.length }} <i data-feather="user"></i></p>
+                    <ul ref="clients" class="clients" style="margin: 0px 0px 50px 30px;" :style="{visibility: clientHover ? 'visible' : 'hidden'}">
                         <li :key="client" v-for="client in getChat.clients">{{ client }}</li>
                     </ul>
                 </div>
                 <input @keyup.enter="sendChat()" v-model="chatMessage" type="text" placeholder="Type a message...">
                 <button @click="sendChat()"><i data-feather="send"></i></button>
             </div>
-            <div id="anchor"></div>
         </div>
     </div>
 </template>
 
 <style scoped>
+#anchor {
+    height: 1px;
+    overflow-anchor: auto;
+}
 .absolute {
     position: absolute;
 }
@@ -92,27 +95,27 @@ export default {
     left: 0;
     bottom: 0;
 }
-
+.clients {
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px 10px;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 1;
+}
 .chat-container {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     box-shadow: inset 0px 0px 8px 0px rgba(0, 0, 0, 0.6);
     border-radius: 8px;
     width: 100%;
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 350px;
+    max-width: 350px;
     height: 60vh;
     max-height: 60vh;
-    margin-left: 10px;
+    margin-left: 20px;
     transition: all .3s ease;
-    overflow-x: hidden;
-    overflow-y: scroll;
 }
 
-.chat-container * {
-    overflow-anchor: none;
-}
 
 .message {
     display: flex;
@@ -138,6 +141,7 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     border-radius: 25px;
     transition: all .3s ease;
+    z-index: 5;
 }
 
 .chat-button-show:hover {
@@ -193,7 +197,6 @@ button svg {
     justify-content: space-evenly;
     margin: 8px;
     max-height: 20px;
-    overflow-anchor: auto;
 }
 
 .horizontal-container p {
@@ -201,10 +204,16 @@ button svg {
     align-items: center;
 }
 
-ul {
+.chatBox {
     padding: 0;
-    margin: 30px;
+    margin: 15px;
     position: relative;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+ul * {
+    overflow-anchor: none;
 }
 
 li {
