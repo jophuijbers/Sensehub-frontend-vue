@@ -19,6 +19,9 @@ export default {
         formatTime(duration) {
             let formattedTime = new Date(duration * 1000).toISOString().substr(11, 5)
             return formattedTime
+        },
+        addIndex(index) {
+            api.patchIndex(this.getWs, this.getCurrentRoom.name, index)
         }
     },
     computed: {
@@ -35,19 +38,24 @@ export default {
 
 <template>
     <div class="wrapper" :style="{ bottom: growPanel ? '0' : '-30.2vh' }">
-        <div style="display: flex; align-items: center; justify-content: start; border-bottom: 1px solid #f1f1f1; margin: 0px 15px;">
+        <div
+            style="display: flex; align-items: center; justify-content: start; border-bottom: 1px solid #f1f1f1; margin: 0px 15px;">
             <div>
                 <SearchPanel />
             </div>
             <div style="display: flex; justify-content: center; align-items: center; flex-grow: 1;">
-                <button @click="growPanel = !growPanel" class="playlist-header">Playlist<div style="display: flex; justify-content: center; align-items: center; transition: all .6s ease;" :class="{ turn: !growPanel }"><i data-feather="chevron-down"></i></div></button>
+                <button @click="growPanel = !growPanel" class="playlist-header">Playlist<div
+                        style="display: flex; justify-content: center; align-items: center; transition: all .6s ease;"
+                        :class="{ turn: !growPanel }"><i data-feather="chevron-down"></i></div></button>
             </div>
         </div>
         <div class="playlist-container">
             <ul>
-                <li :key="video.name" v-for="video in getCurrentRoom.playlist">
+                <li :key="index" v-for="(video, index) in getCurrentRoom.playlist">
                     <div style="display: flex; align-items: center;">
-                        <p>{{ video.name }}</p>
+                        <p v-if="getUser.isAdmin === true" class="item" @click="addIndex(index - getCurrentRoom.index)">
+                            {{ video.name }}</p>
+                        <p v-else>{{ video.name }}</p>
                         <p style="color: #a1a1a1; margin-left: 12px;">{{ formatTime(video.duration) }}</p>
                     </div>
                     <button @click="removeVideo(getCurrentRoom.playlist.indexOf(video))" v-if="getUser.isAdmin"><i
@@ -71,9 +79,11 @@ export default {
     background-color: #1e1e1e;
     border-top-left-radius: 8px;
 }
+
 .turn {
     transform: rotate(180deg);
 }
+
 .playlist-container {
     display: flex;
     flex-direction: column;
@@ -86,15 +96,24 @@ export default {
     overflow-y: scroll;
     max-width: 350px;
 }
-.playlist-header{
+
+.playlist-header {
     margin: 20px 0px;
     font-size: large;
     font-family: 'Roboto';
-    width:fit-content;
+    width: fit-content;
 }
 
-.playlist-header:hover{
+.playlist-header:hover {
     cursor: pointer;
+    color: #a1a1a1;
+}
+
+.item {
+    cursor: pointer;
+}
+
+.item:hover {
     color: #a1a1a1;
 }
 
@@ -110,7 +129,7 @@ ul {
     height: 100.01%
 }
 
-svg{
+svg {
     height: 16px;
 }
 

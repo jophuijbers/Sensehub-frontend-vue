@@ -51,7 +51,7 @@ export default {
         removeVideo(index) {
             api.deleteVideo(this.getWs, this.getCurrentRoom.name, index)
         },
-        setIndex(index) {
+        addIndex(index) {
             api.patchIndex(this.getWs, this.getCurrentRoom.name, index)
         },
 
@@ -74,7 +74,7 @@ export default {
         ...mapGetters(['getVideo', 'getWs', 'getCurrentRoom', 'getTime']),
         time: {
             get() {
-                return this.getTime
+                return parseInt(this.getTime)
             },
             set(value) {
                 this.setTime(value)
@@ -88,8 +88,8 @@ export default {
     <div class="panel-container">
         <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%;">
             <div class="wrapper">
-                <button @click="setIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
-                <button @click="setIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
+                <button @click="addIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
+                <button @click="addIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
                 <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i
                         data-feather="play"></i></button>
                 <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i
@@ -101,9 +101,10 @@ export default {
                 <button @click="removeVideo(getCurrentRoom.index)" type="button">Remove video</button>
             </div>
             <div class="flex between">
-                <input @keyup.enter="postTime(time + inputTime); inputTime = null" v-model="inputTime" type="number"
-                    placeholder="Add time in sec." min="0" style="margin-right: 0px 10px">
-                <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px">
+                <input @keyup.enter="postTime(time + parseInt(inputTime)); inputTime = null" v-model="inputTime"
+                    type="number" placeholder="Add time in sec." min="0"
+                    style="margin-right: 0px 10px; min-width: 150px;">
+                <!-- <input v-model="path" type="text" placeholder="Path (Not working yet)" style="margin-right: 0px 10px"> -->
             </div>
             <div class="flex" style="width: 100%">
                 <p>{{ formatTime(time) }}</p>
@@ -148,6 +149,11 @@ button {
     color: #f1f1f1;
     cursor: pointer;
     font-size: 12px;
+}
+
+button:hover {
+    stroke: #bbbbbb;
+    transform: scale(1.1)
 }
 
 label {

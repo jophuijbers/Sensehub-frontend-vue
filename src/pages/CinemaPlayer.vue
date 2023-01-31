@@ -184,7 +184,11 @@ export default {
     margin-right: 70px;
 }
 
-video::-webkit-media-controls-enclosure {
+video {
+    pointer-events: none;
+}
+
+video::-webkit-media-controls {
     display: none !important;
 }
 

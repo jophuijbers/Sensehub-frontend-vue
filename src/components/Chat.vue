@@ -67,22 +67,22 @@ export default {
                     <li class="message" v-if="message.clientName !== 'server' &&
                     (getUser.isAdmin || checkTime(message.timeStamp))" :key="index"
                         :style="checkTime(message.timeStamp) ? {} : { 'font-style': 'italic' }">
-                        <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{
+                        <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
                             formatTime(message.timeStamp)
                         }} </p>
                         <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
                         `${message.clientName}:` }}</p>
-                        <p
+                        <p style="word-break: break-all;"
                             :style="checkTime(message.timeStamp) ? { 'color': '#ccc8c1' } : { 'color': '#6e6e6e', 'font-style': 'italic' }">
                             {{ message.message }}</p>
                     </li>
                     <li class="message" v-if="message.clientName === 'server'" :key="index">
-                        <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{
+                        <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
                             formatTime(message.timeStamp)
                         }} </p>
                         <p style="font-weight: 500; color: #ff0000">{{
                         '[server] ' }}</p>
-                        <p style="color: #6e6e6e">{{ message.message }}</p>
+                        <p style="color: #6e6e6e; word-break: break-all;">{{ message.message }}</p>
                     </li>
                 </template>
                 <div id="anchor"></div>
@@ -180,7 +180,7 @@ input {
     justify-content: center;
     width: 60%;
     height: 20px;
-    font-size: 10px;
+    font-size: 12px;
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #f1f1f1;
@@ -203,6 +203,11 @@ button {
     border: none;
     color: #f1f1f1;
     cursor: pointer;
+}
+
+button:hover {
+    stroke: #bbbbbb;
+    transform: scale(1.1)
 }
 
 p svg {
@@ -243,6 +248,7 @@ ul * {
 
 li {
     list-style: none;
+    align-items: baseline;
 }
 
 .client {
