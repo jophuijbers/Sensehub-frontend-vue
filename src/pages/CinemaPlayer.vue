@@ -30,7 +30,7 @@ export default {
         formatTime(tempTime) {
             let time = "00:00:00"
 
-            if (!isNaN(tempTime))
+            if (!isNaN(tempTime) || tempTime !== undefined)
                 time = new Date(parseInt(tempTime) * 1000)
                     .toISOString()
                     .substr(11, 8)
@@ -38,10 +38,13 @@ export default {
             return time
         },
         formatPath(path) {
-            let fileName = path
-                .replace(/\.[^/.]+$/, "")
-                .split("/")
-                .pop()
+            let fileName = this.getCurrentRoom.name
+            if (path !== "") {
+                fileName = path
+                    .replace(/\.[^/.]+$/, "")
+                    .split("/")
+                    .pop()
+            }
             return fileName
         },
         toLobby() {
@@ -61,7 +64,7 @@ export default {
                 if (this.getCurrentRoom.path !== msg[1].path)
                     this.$refs.video.load()
                 this.setCurrentRoom(msg[1])
-                if (this.getCurrentRoom === "") this.getCurrentRoom.time = 0
+                if (this.getCurrentRoom.path === "") this.getCurrentRoom.time = 0
                 this.$refs.video.volume = this.getVolume / 100
                 this.$refs.video.currentTime = msg[1].time
                 msg[1].play ? this.$refs.video.play() : this.$refs.video.pause()
@@ -106,12 +109,13 @@ export default {
                 this.setTime(value)
             },
         },
-        banner() {
-            let bannerURL = "https://api.sensegang.nl/thumbnails/cinema_banner.jpg"
-            if (this.getWs !== undefined && this.getWs.readyState === 3) {
-                bannerURL = "https://api.sensegang.nl/thumbnails/cinema_banner_noconn.jpg"
+        banner: {
+            cache: false,
+            get() {
+                return this.getWs !== undefined && this.getWs.readyState === 3 ?
+                    "https://api.sensegang.nl/thumbnails/cinema_banner_noconn.jpg" :
+                    "https://api.sensegang.nl/thumbnails/cinema_banner.jpg"
             }
-            return bannerURL
         },
     },
 }
@@ -121,7 +125,7 @@ export default {
     <div class="container">
         <div @click="toLobby()" class="back-wrapper">
             <i data-feather="chevron-left"></i>
-            <h1 style="margin-left: 10px; margin-bottom: 20px;">{{ getCurrentRoom.name }}</h1>
+            <h1 style="margin-left: 10px;">{{ getCurrentRoom.name }}</h1>
         </div>
         <div class="video-chat-wrapper">
             <div class="horizontal-container">
@@ -132,8 +136,9 @@ export default {
                     <div class="control-wrapper">
                         <div class="info">
                             <p style="flex-grow: 1; width: fit-content;">{{ formatPath(getCurrentRoom.path) }}</p>
-                            <p style="margin: 0px 10px;">-</p>
-                            <p style="flex-grow: 1; width: fit-content;">{{ `${formatTime(this.time)} / ${formatTime(getCurrentRoom.duration)}` }}</p>
+                            <p style="margin: 0px 10px">-</p>
+                            <p style="flex-grow: 1; width: fit-content;">{{ `${formatTime(this.time)} /
+                            ${formatTime(getCurrentRoom.duration)}` }}</p>
                         </div>
                         <ClientPanel />
                     </div>
@@ -145,7 +150,7 @@ export default {
         </div>
         <PlaylistPanel />
         <div>
-            <AdminPanel v-if="!getUser.isAdmin" />
+            <AdminPanel v-if="getUser.isAdmin" />
         </div>
     </div>
 </template>
@@ -155,21 +160,25 @@ export default {
     padding: 0px 50px;
     margin-top: 80px;
 }
+
 .video-chat-wrapper {
     display: flex;
 }
+
 .back-wrapper {
     display: flex;
     align-items: center;
     width: 70vw;
     margin-top: 20px;
+    margin-bottom: 20px;
     cursor: pointer;
 }
+
 .chat {
     display: flex;
-    order: 2;
     flex-grow: 1;
 }
+
 .info {
     display: flex;
     margin-right: 70px;
@@ -187,10 +196,6 @@ video::-webkit-media-controls-enclosure {
     flex-wrap: wrap;
 }
 
-.horizontal-container > * {
-    flex: 1 1 50%;
-}
-
 .video-player {
     width: 100%;
     max-height: 60vh;
@@ -198,7 +203,6 @@ video::-webkit-media-controls-enclosure {
     border-radius: 8px;
     background-color: black;
     transition: all 0.3s ease;
-    order: 1;
 }
 
 .controls {
@@ -208,7 +212,6 @@ video::-webkit-media-controls-enclosure {
     left: 0;
     bottom: 0;
     width: 100%;
-    order: 3;
 }
 
 .control-wrapper {
@@ -225,19 +228,17 @@ video::-webkit-media-controls-enclosure {
 
     .video-player {
         margin: 0px 0px 10px 0px;
-        order: 1;
     }
-    .controls {
-        order: 2;
-    }
+
     .chat {
         justify-content: center;
-        order: 3;
     }
+
     .video-chat-wrapper {
         display: flex;
         flex-wrap: wrap;
     }
+
     .horizontal-container {
         flex-wrap: wrap;
     }
@@ -247,17 +248,21 @@ video::-webkit-media-controls-enclosure {
     .container {
         padding: 0px 10px;
     }
+
     .control-wrapper {
         justify-content: center;
         flex-direction: column;
     }
+
     .info {
         margin: 0;
     }
+
     .video-player {
         margin: 0px 0px 10px 0px;
         width: 100%;
     }
+
     .back-wrapper {
         width: 95vw;
     }

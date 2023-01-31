@@ -36,6 +36,10 @@ export default {
                 this.clientColors.set(clientName, hsla)
             }
             return this.clientColors.get(clientName)
+        },
+        checkTime(timeStamp) {
+            let check = new Date(timeStamp).getHours() + 4 > new Date().getHours()
+            return check
         }
     },
     computed: {
@@ -59,18 +63,36 @@ export default {
         </div>
         <div class="chat-container" :style="{ display: growChat ? 'flex' : 'none' }">
             <ul class="chatBox" ref="chatBox" style="flex-grow: 1;">
-                <li class="message" :key="message.message + message.timeStamp" v-for="message in getChat.chat">
-                    <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{ formatTime(message.timeStamp) }} </p>
-                    <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
-                    `${message.clientName}:` }}</p>
-                    <p>{{ message.message }}</p>
-                </li>
+                <template v-for="(message, index) in getChat.chat">
+                    <li class="message" v-if="message.clientName !== 'server' &&
+                    (getUser.isAdmin || checkTime(message.timeStamp))" :key="index"
+                        :style="checkTime(message.timeStamp) ? {} : { 'font-style': 'italic' }">
+                        <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{
+                            formatTime(message.timeStamp)
+                        }} </p>
+                        <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
+                        `${message.clientName}:` }}</p>
+                        <p
+                            :style="checkTime(message.timeStamp) ? { 'color': '#ccc8c1' } : { 'color': '#6e6e6e', 'font-style': 'italic' }">
+                            {{ message.message }}</p>
+                    </li>
+                    <li class="message" v-if="message.clientName === 'server'" :key="index">
+                        <p style="font-weight: lighter; font-size: 14px; display: flex; align-items: end;">{{
+                            formatTime(message.timeStamp)
+                        }} </p>
+                        <p style="font-weight: 500; color: #ff0000">{{
+                        '[server] ' }}</p>
+                        <p style="color: #6e6e6e">{{ message.message }}</p>
+                    </li>
+                </template>
                 <div id="anchor"></div>
             </ul>
             <div class="horizontal-container">
-                <div @mouseover="clientHover = true" @mouseleave="clientHover = false" style="display: flex; align-items: center; position: relative;">
-                    <p> {{ getChat.clients.length }} <i data-feather="user"></i></p>
-                    <ul ref="clients" class="clients" style="margin: 0px 0px 50px 30px;" :style="{visibility: clientHover ? 'visible' : 'hidden'}">
+                <div @mouseover="clientHover = true" @mouseleave="clientHover = false"
+                    style="display: flex; align-items: center; position: relative;">
+                    <p> {{ getChat.clients !== undefined ? getChat.clients.length : 0 }} <i data-feather="user"></i></p>
+                    <ul ref="clients" class="clients" style="margin: 0px 0px 50px 30px;"
+                        :style="{ visibility: clientHover ? 'visible' : 'hidden' }">
                         <li :key="client" v-for="client in getChat.clients">{{ client }}</li>
                     </ul>
                 </div>
@@ -86,6 +108,7 @@ export default {
     height: 1px;
     overflow-anchor: auto;
 }
+
 .absolute {
     position: absolute;
 }
@@ -95,6 +118,7 @@ export default {
     left: 0;
     bottom: 0;
 }
+
 .clients {
     background-color: rgba(0, 0, 0, 0.6);
     padding: 5px 10px;
@@ -102,6 +126,7 @@ export default {
     position: absolute;
     z-index: 1;
 }
+
 .chat-container {
     display: flex;
     flex-direction: column;

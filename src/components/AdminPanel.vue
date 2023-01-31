@@ -52,15 +52,7 @@ export default {
             api.deleteVideo(this.getWs, this.getCurrentRoom.name, index)
         },
         setIndex(index) {
-            let tempIndex = this.getCurrentRoom.index + index
-
-            if (tempIndex > (this.getCurrentRoom.playlist.length - 1)) {
-                tempIndex = 0
-            }
-            else if (tempIndex < 0) {
-                tempIndex = (this.getCurrentRoom.playlist.length - 1)
-            }
-            api.patchIndex(this.getWs, this.getCurrentRoom.name, tempIndex)
+            api.patchIndex(this.getWs, this.getCurrentRoom.name, index)
         },
 
         formatTime(sec) {
@@ -94,12 +86,14 @@ export default {
 
 <template>
     <div class="panel-container">
-        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <div style="display: flex; justify-content: center; align-items: center; flex-direction: column; width: 100%;">
             <div class="wrapper">
                 <button @click="setIndex(-1)" type="button"><i data-feather="skip-back"></i></button>
                 <button @click="setIndex(1)" type="button"><i data-feather="skip-forward"></i></button>
-                <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="play"></i></button>
-                <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i data-feather="pause"></i></button>
+                <button v-show="!getCurrentRoom.play" @click="setPlay()" type="button"><i
+                        data-feather="play"></i></button>
+                <button v-show="getCurrentRoom.play" @click="setPlay()" type="button"><i
+                        data-feather="pause"></i></button>
                 <label>Autoplay<input @click="setAutoplay()" type="checkbox" v-model="autoplay"></label>
                 <label>Loop<input @click="setLoop()" type="checkbox" v-model="loop"></label>
                 <button @click="syncClients()" type="button">Sync clients</button>
@@ -114,7 +108,8 @@ export default {
             <div class="flex" style="width: 100%">
                 <p>{{ formatTime(time) }}</p>
                 <input style="border: none;" class="time-slider" @change="postTime(time)"
-                    @input="() => getVideo.currentTime = time" v-model="time" type="range" :max="getCurrentRoom.duration">
+                    @input="() => getVideo.currentTime = time" v-model="time" type="range"
+                    :max="getCurrentRoom.duration">
             </div>
         </div>
     </div>

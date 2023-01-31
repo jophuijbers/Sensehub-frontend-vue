@@ -36,13 +36,15 @@ export default {
 
 <template>
     <div>
-        <div v-if="getUser.isAdmin" @click="showOverlay = true" style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
+        <div v-if="getUser.isAdmin" @click="showOverlay = true"
+            style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
             <i data-feather="search"></i>
         </div>
         <div v-if="showOverlay" class="overlay">
             <div class="results-container">
                 <div class="search-video">
-                    <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video" />
+                    <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text"
+                        placeholder="Search video" autofocus />
                     <div class="back-button" @click="showOverlay = false"><i data-feather="x"></i></div>
                 </div>
                 <ul>
@@ -66,12 +68,15 @@ export default {
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 3;
 }
+
 svg:hover {
     stroke: #a1a1a1;
 }
+
 .back-button:hover {
     cursor: pointer;
 }
+
 .results-container {
     display: flex;
     flex-direction: column;
@@ -87,6 +92,7 @@ svg:hover {
     max-width: 400px;
     z-index: 999999;
 }
+
 .search-video {
     display: flex;
     justify-content: center;
@@ -95,6 +101,7 @@ svg:hover {
     border-bottom: 1px solid #f1f1f1;
     padding: 15px 0px 10px 0px;
 }
+
 input {
     height: 20px;
     font-size: 16px;
@@ -103,9 +110,11 @@ input {
     border-radius: 0px;
     color: #f1f1f1;
 }
+
 svg {
     height: 16px;
 }
+
 ul {
     padding: 0;
     margin: 0px 15px;
