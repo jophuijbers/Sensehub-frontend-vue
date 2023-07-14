@@ -21,7 +21,8 @@ export const Type = {
     LOOP: 'loop',
     INDEX: 'index',
     VIDEO: 'video',
-    VIDEOS: 'videos'
+    VIDEOS: 'videos',
+    REQUESTVIDEO: 'requestvideo'
 
 }
 

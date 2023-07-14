@@ -1,6 +1,6 @@
 export default function () {
     return {
-        ws: new WebSocket('ws://localhost:3231/'),
+        version: 'v1.03',
         clientName: '',
         currentRoom: null,
         rooms: [],

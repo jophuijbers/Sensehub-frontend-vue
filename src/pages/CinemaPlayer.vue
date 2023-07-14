@@ -13,6 +13,7 @@ export default {
     data() {
         return {
             latency: 0,
+            synced: false
         }
     },
     methods: {
@@ -25,6 +26,7 @@ export default {
         ]),
         ping() {
             api.ping(this.getWs)
+            this.latency = 0
             this.latency -= performance.now()
         },
         formatTime(tempTime) {
@@ -78,12 +80,11 @@ export default {
             }
         }
         feather.replace()
-        api.getStatus(
-            this.getWs,
-            this.getCurrentRoom.name,
-            this.getUser.username
-        )
+        api.getStatus(this.getWs, this.getCurrentRoom.name, this.getUser.username)
 
+        this.$refs.video.onloadeddata = () => {
+            api.getStatus(this.getWs, this.getCurrentRoom.name, this.getUser.username)
+        }
         this.$refs.video.ontimeupdate = () => {
             if (this.$refs.video !== undefined) {
                 this.setTime(this.$refs.video.currentTime)
@@ -138,7 +139,7 @@ export default {
                             <p style="flex-grow: 1; width: fit-content;">{{ formatPath(getCurrentRoom.path) }}</p>
                             <p style="margin: 0px 10px">-</p>
                             <p style="flex-grow: 1; width: fit-content;">{{ `${formatTime(this.time)} /
-                            ${formatTime(getCurrentRoom.duration)}` }}</p>
+                                                            ${formatTime(getCurrentRoom.duration)}` }}</p>
                         </div>
                         <ClientPanel />
                     </div>

@@ -1,6 +1,6 @@
 <script>
 import api from '../services/websocket/websocket-service'
-import { mapGetters } from 'vuex'
+import { mapMutations, mapGetters } from 'vuex'
 import feather from 'feather-icons'
 
 export default {
@@ -10,13 +10,33 @@ export default {
             chatMessage: '',
             growChat: true,
             clientHover: false,
-            clientColors: new Map
+            infoHover: false,
+            clientColors: new Map,
+            hideMessageTime: 4,
+            disco: false,
+            discoKey: 0,
+            intervalID: 0,
+            storedVolume: 0,
         }
     },
     methods: {
+        ...mapMutations([
+            'setCurrentRoom',
+            'setVolume'
+
+        ]),
         sendChat() {
             if (this.chatMessage.trim() !== '') {
-                api.putChat(this.getWs, this.getCurrentRoom.name, this.getUser.username, this.chatMessage)
+                if (this.chatMessage.substring(0, 6) === '/disco') {
+                    this.disco = !this.disco
+                    this.runDisco()
+                } else if (this.chatMessage.substring(0, 5) === '/hide') {
+                    this.growChat = false
+                } else if (this.chatMessage.substring(0, 6) === '/lobby') {
+                    this.setCurrentRoom(null)
+                } else {
+                    api.putChat(this.getWs, this.getCurrentRoom.name, this.getUser.username, this.chatMessage)
+                }
                 this.chatMessage = ''
             }
             else {
@@ -32,22 +52,31 @@ export default {
         },
         getClientColor(clientName) {
             if (!this.clientColors.has(clientName)) {
-                let hsla = `hsla(${360 * Math.random()}, 70%, 80%, 1)`
+                let hsla = `hsla(${360 * Math.random()}, 80%, 70%, 1)`
                 this.clientColors.set(clientName, hsla)
             }
             return this.clientColors.get(clientName)
         },
         checkTime(timeStamp) {
-            let check = new Date(timeStamp).getHours() + 4 > new Date().getHours()
+            let check = (parseInt(Date.parse(timeStamp)) + (this.hideMessageTime * 60 * 60 * 1000)) > Date.now()
             return check
+        },
+        runDisco() {
+            clearInterval(this.intervalID)
+            if (this.disco === true) {
+                this.clientColors.clear()
+                this.discoKey++
+                this.intervalID = setInterval(() => this.runDisco(), 500)
+            }
         }
     },
     computed: {
-        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat']),
+        ...mapGetters(['getWs', 'getCurrentRoom', 'getUser', 'getChat', 'getVideo', 'getVolume']),
     },
     mounted() {
         feather.replace();
         this.$refs.chatBox.scrollIntoView(false)
+        this.runDisco()
     },
     updated() {
         feather.replace();
@@ -63,29 +92,67 @@ export default {
         </div>
         <div class="chat-container" :style="{ display: growChat ? 'flex' : 'none' }">
             <ul class="chatBox" ref="chatBox" style="flex-grow: 1;">
-                <template v-for="(message, index) in getChat.chat">
-                    <li class="message" v-if="message.clientName !== 'server' &&
-                    (getUser.isAdmin || checkTime(message.timeStamp))" :key="index"
-                        :style="checkTime(message.timeStamp) ? {} : { 'font-style': 'italic' }">
-                        <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
-                            formatTime(message.timeStamp)
-                        }} </p>
-                        <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
-                        `${message.clientName}:` }}</p>
-                        <p style="word-break: break-all;"
-                            :style="checkTime(message.timeStamp) ? { 'color': '#ccc8c1' } : { 'color': '#6e6e6e', 'font-style': 'italic' }">
-                            {{ message.message }}</p>
-                    </li>
-                    <li class="message" v-if="message.clientName === 'server'" :key="index">
-                        <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
-                            formatTime(message.timeStamp)
-                        }} </p>
-                        <p style="font-weight: 500; color: #ff0000">{{
-                        '[server] ' }}</p>
-                        <p style="color: #6e6e6e; word-break: break-all;">{{ message.message }}</p>
-                    </li>
-                </template>
-                <div id="anchor"></div>
+                <li class="info-container">
+                    <div @mouseover="infoHover = true" @mouseleave="infoHover = false"
+                        style="display: flex; align-items: center; position: relative;">
+                        <i data-feather="info"></i>
+                        <ul class="info-box" :style="{ visibility: infoHover ? 'visible' : 'hidden' }">
+                            <li>
+                                <h4>/play</h4>
+                                <p>vote to play video</p>
+                            </li>
+                            <li>
+                                <h4>/pause</h4>
+                                <p>vote to pause video</p>
+                            </li>
+                            <li>
+                                <h4>/skip</h4>
+                                <p>vote to skip video</p>
+                            </li>
+                            <li>
+                                <h4>/hide</h4>
+                                <p>hides chat</p>
+                            </li>
+                            <li>
+                                <h4>/lobby</h4>
+                                <p>returns to lobby</p>
+                            </li>
+                            <li>
+                                <h4>/accept</h4>
+                                <p>accepts current request</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <p style="font-size:small; color: #6e6e6e; text-align: center;">Messages get
+                        removed after {{ hideMessageTime }} hours</p>
+                </li>
+                <ul :key="discoKey">
+                    <template v-for="(message, index) in getChat.chat">
+                        <li class="message" v-if="message.clientName !== 'server' &&
+                            (getUser.isAdmin || checkTime(message.timeStamp))" :key="index"
+                            :style="checkTime(message.timeStamp) ? {} : { 'font-style': 'italic' }">
+                            <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
+                                formatTime(message.timeStamp)
+                            }} </p>
+                            <p :style="[{ 'font-weight': 500 }, { color: getClientColor(message.clientName) }]">{{
+                                `${message.clientName}:` }}</p>
+                            <p style="word-break: break-word;"
+                                :style="checkTime(message.timeStamp) ? { 'color': '#ccc8c1' } : { 'color': '#6e6e6e', 'font-style': 'italic' }">
+                                {{ message.message }}</p>
+                        </li>
+                        <li class="message" v-if="message.clientName === 'server' &&
+                            (getUser.isAdmin || checkTime(message.timeStamp))" :key="index"
+                            :style="checkTime(message.timeStamp) ? {} : { 'font-style': 'italic' }">
+                            <p style="font-weight: lighter; font-size: 14px; display: flex;">{{
+                                formatTime(message.timeStamp)
+                            }} </p>
+                            <p style="font-weight: 500; color: #ff0000">{{
+                                '[server] ' }}</p>
+                            <p style="color: #6e6e6e; word-break: break-word;">{{ message.message }}</p>
+                        </li>
+                    </template>
+                    <div id="anchor"></div>
+                </ul>
             </ul>
             <div class="horizontal-container">
                 <div @mouseover="clientHover = true" @mouseleave="clientHover = false"
@@ -141,6 +208,33 @@ export default {
     transition: all .3s ease;
 }
 
+.info-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.info-container svg {
+    height: 16px;
+    margin-right: 5px;
+}
+
+.info-box {
+    background-color: rgba(0, 0, 0, 0.6);
+    left: 26px;
+    top: 20px;
+    padding: 5px 10px;
+    border-radius: 8px;
+    position: absolute;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.info-box li {
+    padding: 2px;
+}
 
 .message {
     display: flex;
@@ -210,11 +304,7 @@ button:hover {
     transform: scale(1.1)
 }
 
-p svg {
-    height: 14px;
-}
-
-button svg {
+svg {
     height: 14px;
 }
 

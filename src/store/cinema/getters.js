@@ -1,4 +1,5 @@
 const getters = {
+    getVersion: (state) => state.version,
     getWs: (state) => state.ws,
     getClientName: (state) => state.clientName,
     getCurrentRoom: (state) => state.currentRoom,

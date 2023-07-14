@@ -36,6 +36,10 @@ function postVideo(websocket, roomName, video) {
     send(websocket, [{ "method": Method.POST, "type": Type.VIDEO }, { "room": roomName, "video": video }])
 }
 
+function postRequestVideo(websocket, roomName, clientName, video) {
+    send(websocket, [{ "method": Method.POST, "type": Type.REQUESTVIDEO }, { "room": roomName, "clientName": clientName, "video": video }])
+}
+
 function postRoom(websocket, roomName, thumbnail) {
     send(websocket, [{ "method": Method.POST, "type": Type.ROOM }, { "room": roomName, "thumbnail": thumbnail }])
 }
@@ -76,4 +80,4 @@ function deleteVideo(websocket, roomName, index) {
     send(websocket, [{ "method": Method.DELETE, "type": Type.VIDEO }, { "room": roomName, "index": index }])
 }
 
-export default { ping, getRooms, getStatus, getVideos, postTime, postPath, postVideo, postRoom, patchPath, patchPlay, putChat, patchIndex, patchLoop, patchAutoplay, patchStatus, deleteChat, deleteVideo }
+export default { ping, getRooms, getStatus, getVideos, postTime, postPath, postVideo, postRequestVideo, postRoom, patchPath, patchPlay, putChat, patchIndex, patchLoop, patchAutoplay, patchStatus, deleteChat, deleteVideo }

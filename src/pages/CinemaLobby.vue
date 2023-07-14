@@ -24,12 +24,10 @@ export default {
                 this.intervalID = setInterval(() => this.setRooms(), 1000)
             }
         },
-
         onClick(room) {
             this.setCurrentRoom(room)
             clearInterval(this.intervalID)
         },
-
         formatTime(room) {
             let time = "00:00:00"
             let duration = "00:00:00"
@@ -45,6 +43,13 @@ export default {
 
             return `${time} / ${duration}`
         },
+        formatPath(path) {
+            let name = path
+                .replace(/\.[^/.]+$/, "")
+                .split("/")
+                .pop()
+            return name
+        }
     },
     mounted() {
         (this.getWs.onmessage = (message) => {
@@ -77,7 +82,7 @@ export default {
         feather.replace()
     },
     computed: {
-        ...mapGetters(["getWs", "getCurrentRoom", "getRooms"]),
+        ...mapGetters(["getVersion", "getWs", "getCurrentRoom", "getRooms"]),
     },
 }
 </script>
@@ -85,7 +90,10 @@ export default {
 <template>
     <div class="container">
         <div class="cinema-wrapper">
-            <h1>Cinema's</h1>
+            <div class="cinema-header">
+                <h1>Cinema's</h1>
+                <p style="font-weight: 300;">{{ getVersion }}</p>
+            </div>
             <div ref="cinemaContainer" class="cinema-container">
                 <template class="scroll" v-for="room in this.getRooms">
                     <li class="cinema-card" @click="onClick(room)" :key="room.name" v-if="room.type === 'cinema'">
@@ -94,8 +102,9 @@ export default {
                             <div class="cinema-info">
                                 <div>
                                     <h2>{{ room.name }}</h2>
+                                    <p class="break">{{ formatPath(room.path) }}</p>
                                 </div>
-                                <div class="dot-indicator">
+                                <div class=" dot-indicator">
                                     <div style="
                                             display: flex;
                                             align-items: center;
@@ -138,6 +147,7 @@ export default {
                             <div class="room-info">
                                 <div>
                                     <h2>{{ room.name }}</h2>
+                                    <p class="break">{{ formatPath(room.path) }}</p>
                                 </div>
                                 <div class="dot-indicator">
                                     <div style="
@@ -166,8 +176,7 @@ export default {
                             </div>
                             <div class="room-image">
                                 <img :src="
-    room.playlist[room.index].thumbnail ===
-        undefined
+    room.playlist[room.index].thumbnail === undefined
         ? room.thumbnail
         : room.playlist[room.index]
             .thumbnail
@@ -192,6 +201,13 @@ export default {
 
 .container h1 {
     margin-top: 20px;
+}
+
+.cinema-header {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
 }
 
 .cinema-card {
@@ -326,6 +342,11 @@ export default {
     position: absolute;
     width: 100%;
     height: 100%;
+}
+
+.break {
+    white-space: normal;
+    font-weight: 300;
 }
 
 .room-info h2 {

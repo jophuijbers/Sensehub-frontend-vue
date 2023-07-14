@@ -13,7 +13,8 @@ export default {
     },
     methods: {
         addVideo(video) {
-            api.postVideo(this.getWs, this.getCurrentRoom.name, video)
+            console.log(this.getUser.isAdmin)
+            this.getUser.isAdmin ? api.postVideo(this.getWs, this.getCurrentRoom.name, video) : api.postRequestVideo(this.getWs, this.getCurrentRoom.name, this.getUser.username, video)
         }
     },
     computed: {
@@ -36,15 +37,15 @@ export default {
 
 <template>
     <div>
-        <div v-if="getUser.isAdmin" @click="showOverlay = true"
+        <div v-if="getUser.isAdmin || this.getCurrentRoom.type === 'cinema'" @click="showOverlay = true"
             style="display: flex; align-items: center; justify-content: center; cursor: pointer;">
             <i data-feather="search"></i>
         </div>
         <div v-if="showOverlay" class="overlay">
             <div class="results-container">
                 <div class="search-video">
-                    <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text"
-                        placeholder="Search video" autofocus />
+                    <input @keyup.enter="addVideo(searchValue)" v-model="searchValue" type="text" placeholder="Search video"
+                        autofocus />
                     <div class="back-button" @click="showOverlay = false"><i data-feather="x"></i></div>
                 </div>
                 <ul>
